@@ -26,6 +26,8 @@ interface CourseWithProgress {
   isAdmin?: boolean;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
+
 export default function CourseDetail() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated, user } = useAuth();
@@ -55,7 +57,7 @@ export default function CourseDetail() {
           throw new Error('Token non trouvé');
         }
 
-        const response = await fetch(`http://localhost:8080/api/courses/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/courses/${id}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
