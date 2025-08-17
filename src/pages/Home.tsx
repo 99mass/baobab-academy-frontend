@@ -26,7 +26,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Vérifier l'authentification
         const user = authService.getCurrentUser();
         setIsAuthenticated(!!user);
@@ -48,7 +48,7 @@ export default function Home() {
           setCategories(categoryResponse.data);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des données:', error);
+        console.error("Erreur lors du chargement des données:", error);
       } finally {
         setLoading(false);
       }
@@ -60,13 +60,16 @@ export default function Home() {
   // Fonction pour obtenir l'URL de l'image
   const getImageUrl = (coverImage: string | undefined) => {
     if (!coverImage) return null;
-    
-    if (coverImage.startsWith('http')) {
+
+    if (coverImage.startsWith("http")) {
       return coverImage;
     }
-    
-    const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-    return `${API_BASE_URL}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`;
+
+    const API_BASE_URL =
+      import.meta.env.VITE_API_URL || "http://localhost:8080";
+    return `${API_BASE_URL}${
+      coverImage.startsWith("/") ? "" : "/"
+    }${coverImage}`;
   };
 
   return (
@@ -103,7 +106,7 @@ export default function Home() {
                   <span>Explorer nos cours</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
-                
+
                 {/* Bouton Créer un compte - masqué si connecté */}
                 {!isAuthenticated && (
                   <Link
@@ -149,7 +152,7 @@ export default function Home() {
                     <div>
                       <p className="font-semibold text-sm">95% de réussite</p>
                       <p className="text-xs text-gray-500">
-                        Taux de certification
+                        Taux de réussite
                       </p>
                     </div>
                   </div>
@@ -190,23 +193,7 @@ export default function Home() {
                 </Link>
               ))
             ) : (
-              // Fallback uniquement si l'API échoue
-              [
-                "JavaScript",
-                "Python", 
-                "Design UX/UI",
-                "Marketing Digital",
-                "Data Science",
-              ].map((tag, index) => (
-                <Link
-                  key={tag}
-                  to={`/courses?search=${encodeURIComponent(tag)}`}
-                  className="px-4 py-2 bg-white text-gray-700 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-lg animate-fade-in opacity-0"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  {tag}
-                </Link>
-              ))
+              <></>
             )}
           </div>
         </div>
@@ -241,22 +228,28 @@ export default function Home() {
                   <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
                     <div className="overflow-hidden">
                       <img
-                        src={getImageUrl(course.coverImage) || "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"}
+                        src={
+                          getImageUrl(course.coverImage) ||
+                          "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                        }
                         alt={course.title}
                         className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
                         onError={(e) => {
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
+                          e.currentTarget.src =
+                            "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80";
                         }}
                       />
                     </div>
                     <div className="p-6">
                       <div className="flex items-center space-x-2 mb-3">
                         <span className="bg-accent/10 text-accent px-3 py-1 rounded-full text-xs font-medium group-hover:bg-accent group-hover:text-white transition-colors">
-                          {course.categoryName || 'Design'}
+                          {course.categoryName || "Design"}
                         </span>
                         <div className="flex items-center space-x-1">
                           <Star className="w-4 h-4 text-accent fill-current group-hover:scale-110 transition-transform" />
-                          <span className="text-sm text-gray-600">{course.rating.toFixed(1)}</span>
+                          <span className="text-sm text-gray-600">
+                            {course.rating.toFixed(1)}
+                          </span>
                         </div>
                       </div>
                       <h3 className="font-bold text-lg text-textPrimary mb-2 group-hover:text-primary transition-colors">
@@ -312,7 +305,7 @@ export default function Home() {
             <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-in-up opacity-0 animation-delay-200">
               <div className="flex items-center space-x-4 mb-4">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcjzdDTlCtEXZhKsQz_E9wzaz1AYI9yc5Xjg&s"
                   alt="Aminata Diop"
                   className="w-12 h-12 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                 />
@@ -340,7 +333,7 @@ export default function Home() {
             <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-in-up opacity-0 animation-delay-400">
               <div className="flex items-center space-x-4 mb-4">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_ldG6I0PTeCLk8MouYxXfe994hLAFHa_pPA&s"
                   alt="Mamadou Sall"
                   className="w-12 h-12 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                 />
@@ -368,7 +361,7 @@ export default function Home() {
             <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-in-up opacity-0 animation-delay-600">
               <div className="flex items-center space-x-4 mb-4">
                 <img
-                  src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&q=80"
+                  src="https://plus.unsplash.com/premium_photo-1661589836910-b3b0bf644bd5?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmVzc2lvbmFsJTIwYmxhY2slMjB3b21hbnxlbnwwfHwwfHx8MA%3D%3D"
                   alt="Fatou Ndiaye"
                   className="w-12 h-12 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                 />
