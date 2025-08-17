@@ -139,8 +139,8 @@ export default function CourseDetail() {
       }
       
       console.log("🔑 Token présent, envoi de la requête...");
-      
-      const response = await fetch(`http://localhost:8080/api/courses/${id}/enroll`, {
+
+      const response = await fetch(`${API_BASE_URL}/courses/${id}/enroll`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
