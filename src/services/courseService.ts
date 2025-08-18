@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// services/courseService.ts
 import axios from 'axios';
 import type { AxiosResponse } from 'axios';
 import type {
@@ -13,7 +12,10 @@ import type {
     LessonCreateRequest,
     ApiResponse,
     PageResponse,
-    CourseWithProgress
+    CourseWithProgress,
+    CourseRating,
+    UserRatingRequest,
+    RatingStats
 } from '../types/course';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
@@ -34,6 +36,14 @@ const publicAPI = axios.create({
     },
 });
 
+// Instance Axios pour les endpoints utilisateur connecté
+const userAPI = axios.create({
+    baseURL: `${API_BASE_URL}/courses`,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
 // Instance Axios pour les catégories
 const categoryAPI = axios.create({
     baseURL: `${API_BASE_URL}/categories`,
@@ -42,20 +52,22 @@ const categoryAPI = axios.create({
     },
 });
 
-// Intercepteur pour ajouter le token aux requêtes admin
-adminAPI.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
-        }
-        return config;
-    },
-    (error) => Promise.reject(error)
-);
+// Intercepteur pour ajouter le token aux requêtes admin et user
+[adminAPI, userAPI].forEach(api => {
+    api.interceptors.request.use(
+        (config) => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+        },
+        (error) => Promise.reject(error)
+    );
+});
 
 // Intercepteur pour gérer les erreurs
-[adminAPI, publicAPI, categoryAPI].forEach(api => {
+[adminAPI, publicAPI, userAPI, categoryAPI].forEach(api => {
     api.interceptors.response.use(
         (response) => response,
         (error) => {
@@ -128,7 +140,6 @@ export const courseService = {
         return response.data;
     },
 
-    // 🆕 NOUVEAU : Upload vidéo locale
     async uploadLessonVideo(lessonId: string, file: File): Promise<ApiResponse<Lesson>> {
         console.log('🎥 Upload vidéo pour la leçon:', lessonId);
         const formData = new FormData();
@@ -146,7 +157,6 @@ export const courseService = {
         return response.data;
     },
 
-    // 🆕 NOUVEAU : Définir URL vidéo externe
     async setLessonVideoUrl(lessonId: string, videoUrl: string): Promise<ApiResponse<Lesson>> {
         console.log('🔗 Définition URL vidéo externe:', lessonId, videoUrl);
         const response: AxiosResponse<ApiResponse<Lesson>> = await adminAPI.put(
@@ -155,7 +165,6 @@ export const courseService = {
         return response.data;
     },
 
-    // 🆕 NOUVEAU : Upload document
     async uploadLessonDocument(lessonId: string, file: File): Promise<ApiResponse<Lesson>> {
         console.log('📄 Upload document pour la leçon:', lessonId);
         const formData = new FormData();
@@ -210,21 +219,18 @@ export const courseService = {
         return response.data;
     },
 
-    // 🆕 NOUVEAU : Supprimer un chapitre
     async deleteChapter(chapterId: string): Promise<ApiResponse<void>> {
         console.log('🗑️ Suppression du chapitre:', chapterId);
         const response: AxiosResponse<ApiResponse<void>> = await adminAPI.delete(`/chapters/${chapterId}`);
         return response.data;
     },
 
-    // 🆕 NOUVEAU : Supprimer une leçon
     async deleteLesson(lessonId: string): Promise<ApiResponse<void>> {
         console.log('🗑️ Suppression de la leçon:', lessonId);
         const response: AxiosResponse<ApiResponse<void>> = await adminAPI.delete(`/lessons/${lessonId}`);
         return response.data;
     },
 
-    // 🆕 NOUVEAU : Modifier une leçon
     async updateLesson(lessonId: string, data: LessonCreateRequest): Promise<ApiResponse<Lesson>> {
         console.log('✏️ Modification de la leçon:', lessonId, data);
         const response: AxiosResponse<ApiResponse<Lesson>> = await adminAPI.put(`/lessons/${lessonId}`, data);
@@ -298,6 +304,113 @@ export const courseService = {
         return response.data;
     },
 
+    // ==================== GESTION UTILISATEUR CONNECTÉ ====================
+
+    async getCourseWithProgress(courseId: string): Promise<ApiResponse<CourseWithProgress>> {
+        console.log('📊 Récupération du cours avec progression:', courseId);
+        const response: AxiosResponse<ApiResponse<CourseWithProgress>> = await userAPI.get(`/${courseId}`);
+        
+        console.log('✅ Données reçues du backend:', response.data);
+        return response.data;
+    },
+
+    async enrollInCourse(courseId: string): Promise<ApiResponse<any>> {
+        console.log("🎯 Service: Inscription au cours", courseId);
+        const response: AxiosResponse<ApiResponse<any>> = await userAPI.post(`/${courseId}/enroll`, {});
+        
+        console.log("✅ Service: Réponse inscription", response.data);
+        return response.data;
+    },
+
+    async markLessonAsCompleted(lessonId: string): Promise<ApiResponse<Lesson>> {
+        console.log('✅ Service: Marquage leçon comme complétée:', lessonId);
+        const response: AxiosResponse<ApiResponse<Lesson>> = await userAPI.post(
+            `/lessons/${lessonId}/complete`,
+            {}
+        );
+        
+        console.log('✅ Service: Leçon marquée avec succès', response.data);
+        return response.data;
+    },
+
+    async updateLessonProgress(lessonId: string, progressPercentage: number, watchTimeSeconds: number = 0): Promise<ApiResponse<Lesson>> {
+        console.log('📈 Service: Mise à jour progression:', lessonId, progressPercentage + '%');
+        const response: AxiosResponse<ApiResponse<any>> = await userAPI.put(
+            `/lessons/${lessonId}/progress?progressPercentage=${progressPercentage}&watchTimeSeconds=${watchTimeSeconds}`,
+            {}
+        );
+        
+        return response.data;
+    },
+
+    // ==================== SYSTÈME DE NOTATION ====================
+
+    async rateCourse(courseId: string, rating: UserRatingRequest): Promise<ApiResponse<CourseRating>> {
+        console.log('⭐ Service: Noter le cours:', courseId, rating);
+        
+        const response: AxiosResponse<ApiResponse<CourseRating>> = await userAPI.post(
+            `/${courseId}/rate`,
+            rating
+        );
+        
+        console.log('✅ Service: Note ajoutée avec succès', response.data);
+        return response.data;
+    },
+
+    async getUserRating(courseId: string): Promise<ApiResponse<CourseRating | null>> {
+        console.log('📊 Service: Récupération note utilisateur:', courseId);
+        
+        try {
+            const response: AxiosResponse<ApiResponse<CourseRating>> = await userAPI.get(
+                `/${courseId}/my-rating`
+            );
+            
+            return response.data;
+        } catch (error: any) {
+            if (error.response?.status === 404) {
+                // L'utilisateur n'a pas encore noté ce cours
+                return { 
+                    success: true, 
+                    message: 'Aucune note trouvée', 
+                    data: null, 
+                    timestamp: new Date().toISOString() 
+                };
+            }
+            throw error;
+        }
+    },
+
+    async getCourseRatings(courseId: string, page: number = 0, size: number = 10): Promise<ApiResponse<PageResponse<CourseRating>>> {
+        console.log('📝 Service: Récupération des commentaires:', courseId);
+        
+        const response: AxiosResponse<ApiResponse<PageResponse<CourseRating>>> = await userAPI.get(
+            `/${courseId}/ratings?page=${page}&size=${size}`
+        );
+        
+        return response.data;
+    },
+
+    async getCourseRatingStats(courseId: string): Promise<ApiResponse<RatingStats>> {
+        console.log('📈 Service: Récupération des statistiques de notation:', courseId);
+        
+        const response: AxiosResponse<ApiResponse<RatingStats>> = await userAPI.get(
+            `/${courseId}/rating-stats`
+        );
+        
+        return response.data;
+    },
+
+    async deleteMyRating(courseId: string): Promise<ApiResponse<void>> {
+        console.log('🗑️ Service: Suppression de ma note:', courseId);
+        
+        const response: AxiosResponse<ApiResponse<void>> = await userAPI.delete(
+            `/${courseId}/my-rating`
+        );
+        
+        console.log('✅ Service: Note supprimée avec succès');
+        return response.data;
+    },
+
     // ==================== UTILITAIRES ====================
 
     formatDuration(duration: string): string {
@@ -329,96 +442,69 @@ export const courseService = {
         const labels = {
             TEXT: 'Texte',
             VIDEO: 'Vidéo',
-            DOCUMENT: 'Document' // 🆕 AJOUTÉ
+            DOCUMENT: 'Document'
         };
         return labels[type as keyof typeof labels] || type;
     },
 
-    // ==================== GESTION UTILISATEUR CONNECTÉ ====================
-
-    async getCourseWithProgress(courseId: string): Promise<ApiResponse<CourseWithProgress>> {
-        console.log('📊 Récupération du cours avec progression:', courseId);
-        const token = localStorage.getItem('token');
-        const response: AxiosResponse<ApiResponse<CourseWithProgress>> = await axios.get(
-            `${API_BASE_URL}/courses/${courseId}`,
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-        
-        console.log('✅ Données reçues du backend:', response.data);
-        return response.data;
+    getRatingLabel(rating: number): string {
+        const labels = {
+            1: 'Très décevant',
+            2: 'Décevant', 
+            3: 'Correct',
+            4: 'Très bien',
+            5: 'Excellent'
+        };
+        return labels[rating as keyof typeof labels] || '';
     },
 
-    async enrollInCourse(courseId: string): Promise<ApiResponse<any>> {
-        console.log("🎯 Service: Inscription au cours", courseId);
-        const token = localStorage.getItem('token');
+    // Fonction utilitaire pour formater les dates
+    formatDate(dateString: string): string {
+        return new Date(dateString).toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        });
+    },
+
+    // Fonction utilitaire pour formater les dates avec l'heure
+    formatDateTime(dateString: string): string {
+        return new Date(dateString).toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    },
+
+    // Fonction pour valider un rating
+    isValidRating(rating: number): boolean {
+        return Number.isInteger(rating) && rating >= 1 && rating <= 5;
+    },
+
+    // Fonction pour calculer la distribution des notes
+    calculateRatingDistribution(ratings: CourseRating[]): { [key: number]: number } {
+        const distribution = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
         
-        if (!token) {
-            throw new Error('Token d\'authentification manquant');
+        ratings.forEach(rating => {
+            if (rating.rating >= 1 && rating.rating <= 5) {
+                (distribution as any)[rating.rating]++;
+            }
+        });
+        
+        return distribution;
+    },
+
+    // Fonction pour obtenir l'URL d'image avec fallback
+    getImageUrl(coverImage: string | undefined): string | null {
+        if (!coverImage) return null;
+
+        if (coverImage.startsWith('http')) {
+            return coverImage;
         }
 
-        const response: AxiosResponse<ApiResponse<any>> = await axios.post(
-            `${API_BASE_URL}/courses/${courseId}/enroll`,
-            {},
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-        
-        console.log("✅ Service: Réponse inscription", response.data);
-        return response.data;
-    },
-
-    async markLessonAsCompleted(lessonId: string): Promise<ApiResponse<Lesson>> {
-        console.log('✅ Service: Marquage leçon comme complétée:', lessonId);
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
-            throw new Error('Token d\'authentification manquant');
-        }
-
-        const response: AxiosResponse<ApiResponse<Lesson>> = await axios.post(
-            `${API_BASE_URL}/courses/lessons/${lessonId}/complete`,
-            {},
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-        
-        console.log('✅ Service: Leçon marquée avec succès', response.data);
-        return response.data;
-    },
-
-    async updateLessonProgress(lessonId: string, progressPercentage: number, watchTimeSeconds: number = 0): Promise<ApiResponse<Lesson>> {
-        console.log('📈 Service: Mise à jour progression:', lessonId, progressPercentage + '%');
-        const token = localStorage.getItem('token');
-        
-        if (!token) {
-            throw new Error('Token d\'authentification manquant');
-        }
-
-        const response: AxiosResponse<ApiResponse<any>> = await axios.put(
-            `${API_BASE_URL}/courses/lessons/${lessonId}/progress?progressPercentage=${progressPercentage}&watchTimeSeconds=${watchTimeSeconds}`,
-            {},
-            {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-        
-        return response.data;
-    },
-
+        const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+        return `${API_BASE_URL}${coverImage.startsWith('/') ? '' : '/'}${coverImage}`;
+    }
 };

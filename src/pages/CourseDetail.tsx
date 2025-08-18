@@ -1,5 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// /* eslint-disable react-hooks/exhaustive-deps */
+// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -12,10 +14,12 @@ import {
   ChevronDown,
   ArrowLeft,
   Users,
+  X, // Added X icon for close button
 } from "lucide-react";
 import { courseService } from "../services/courseService";
 import { useAuth } from "../hooks/useAuth";
 import type { Course } from "../types/course";
+import CourseRatingComponent from "../components/courseRatingComponent";
 
 interface CourseWithProgress {
   course: Course;
@@ -25,6 +29,31 @@ interface CourseWithProgress {
   totalLessons?: number;
   isAdmin?: boolean;
 }
+
+// Modal Component
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-lg w-full p-6 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+        >
+          <X size={24} />
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:8080/api";
@@ -37,6 +66,11 @@ export default function CourseDetail() {
   const [error, setError] = useState<string | null>(null);
   const [expandedChapter, setExpandedChapter] = useState<string | null>(null);
   const [enrolling, setEnrolling] = useState(false);
+  const [currentRating, setCurrentRating] = useState(0);
+  const [totalRatings, setTotalRatings] = useState(0);
+  const [showRatingSection, setShowRatingSection] = useState(false);
+
+  // Removed ratingComponentRef
 
   useEffect(() => {
     if (id) {
@@ -76,6 +110,8 @@ export default function CourseDetail() {
 
           if (result.success && result.data) {
             setCourseData(result.data);
+            setCurrentRating(result.data.course.rating || 0);
+            setTotalRatings(result.data.course.totalRatings || 0);
             console.log("✅ Course data définie:", result.data);
 
             // Ouvrir automatiquement le premier chapitre
@@ -102,6 +138,8 @@ export default function CourseDetail() {
             progressPercentage: 0,
             isAdmin: user.role === "ADMIN",
           });
+          setCurrentRating(publicResponse.data?.rating || 0);
+          setTotalRatings(publicResponse.data?.totalRatings || 0);
         }
       } else {
         console.log("🌐 Utilisateur non authentifié, chargement public...");
@@ -115,6 +153,8 @@ export default function CourseDetail() {
           isAdmin: false,
         };
         setCourseData(courseWithProgress);
+        setCurrentRating(response.data?.rating || 0);
+        setTotalRatings(response.data?.totalRatings || 0);
 
         // Ouvrir automatiquement le premier chapitre
         if (response.data?.chapters && response.data.chapters.length > 0) {
@@ -315,6 +355,20 @@ export default function CourseDetail() {
     rawData: { enrolled: courseData.enrolled, isEnrolled: courseData.enrolled },
   });
 
+  const handleRatingUpdate = (newRating: number) => {
+    // When a user submits a new rating, we need to update the course's overall rating
+    // and total number of ratings. This is a simplified update for the UI.
+    // In a real application, you'd likely refetch the course data or get this from the API response.
+    setCurrentRating(newRating);
+    setTotalRatings((prevTotal) => prevTotal + 1);
+    setShowRatingSection(false); // Close modal after update
+  };
+
+  const handleRatingClick = () => {
+    setShowRatingSection(true);
+    // No scrolling needed for modal
+  };
+
   return (
     <div className="min-h-screen bg-neutral">
       {/* Header */}
@@ -388,10 +442,13 @@ export default function CourseDetail() {
                       {course.students?.toLocaleString() || 0} étudiants
                     </span>
                   </div>
-                  <div className="flex items-center space-x-2">
+                  <button
+                    onClick={handleRatingClick}
+                    className="flex items-center space-x-2 cursor-pointer hover:text-yellow-300 transition-colors"
+                  >
                     <Star className="w-5 h-5 text-yellow-400" />
-                    <span>{course.rating?.toFixed(1) || 0}</span>
-                  </div>
+                    <span>{currentRating.toFixed(1)}</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -564,6 +621,8 @@ export default function CourseDetail() {
                 )}
               </div>
             </div>
+
+            {/* Removed direct Course Rating Component rendering here */}
           </div>
 
           {/* Sidebar */}
@@ -720,6 +779,22 @@ export default function CourseDetail() {
           </div>
         </div>
       </div>
+
+      {/* Course Rating Modal */}
+      {id && (
+        <Modal isOpen={showRatingSection} onClose={() => setShowRatingSection(false)}>
+          <CourseRatingComponent
+            courseId={id}
+            isEnrolled={enrolled}
+            isAuthenticated={isAuthenticated}
+            currentRating={currentRating}
+            totalRatings={totalRatings}
+            onRatingUpdate={handleRatingUpdate}
+            initialShowForm={true} // Always show form when modal is open
+            onClose={() => setShowRatingSection(false)} // Pass onClose to component
+          />
+        </Modal>
+      )}
     </div>
   );
 }
