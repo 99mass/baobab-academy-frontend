@@ -12,24 +12,20 @@ import {
   Loader2,
 } from "lucide-react";
 import { courseService } from "../services/courseService";
-import { authService } from "../services/authService";
+import { useAuth } from "../hooks/useAuth";
 import type { Course } from "../types/course";
 import "../css/animation.css";
 
 export default function Home() {
+  const { isAuthenticated } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-
-        // Vérifier l'authentification
-        const user = authService.getCurrentUser();
-        setIsAuthenticated(!!user);
 
         // Récupérer les cours publiés
         const courseResponse = await courseService.getPublishedCourses();
@@ -225,7 +221,7 @@ export default function Home() {
                   className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group animate-slide-in-up opacity-0 hover:scale-105"
                   style={{ animationDelay: `${(index + 1) * 200}ms` }}
                 >
-                  <div >
+                  <div>
                     <div className="overflow-hidden">
                       <img
                         src={
@@ -410,7 +406,7 @@ export default function Home() {
               </Link>
             ) : (
               <Link
-                to="/dashboard"
+                to="/profile"
                 className="bg-accent text-white/90 px-8 py-4 rounded-lg font-semibold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
               >
                 <span>Accéder à mon tableau de bord</span>
