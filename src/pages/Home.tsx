@@ -225,7 +225,7 @@ export default function Home() {
                   className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group animate-slide-in-up opacity-0 hover:scale-105"
                   style={{ animationDelay: `${(index + 1) * 200}ms` }}
                 >
-                  <div className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                  <div >
                     <div className="overflow-hidden">
                       <img
                         src={
