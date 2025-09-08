@@ -32,7 +32,6 @@ export default function Courses() {
   const [selectedDuration, setSelectedDuration] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
 
-  // 🆕 NOUVEAU: État pour la vue (par défaut liste)
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
 
   useEffect(() => {
@@ -64,7 +63,6 @@ export default function Courses() {
     fetchCoursesAndCategories();
   }, []);
 
-  // Fonction pour obtenir l'URL de l'image ou fallback
   const getImageUrl = (coverImage: string | undefined) => {
     if (!coverImage) return null;
 
@@ -118,11 +116,9 @@ export default function Courses() {
     selectedLevel !== "all" ||
     selectedDuration !== "all";
 
-  // 🆕 NOUVEAU: Composant Card pour la vue grille
   const CourseCardGrid = ({ course }: { course: Course }) => (
-    <div className="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-xl hover:border-primary/20 transition-all duration-300 hover:-translate-y-1">
-      {/* Image de couverture avec overlay */}
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary/10 to-accent/10">
+    <div className="group bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-xl hover:border-[#0096F0]/20 transition-all duration-300 hover:-translate-y-1">
+      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#0096F0]/10 to-[#DFB216]/10">
         {course.coverImage ? (
           <>
             <img
@@ -138,19 +134,18 @@ export default function Courses() {
               }}
             />
             <div
-              className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center"
+              className="absolute inset-0 bg-gradient-to-br from-[#0096F0]/20 to-[#DFB216]/20 flex items-center justify-center"
               style={{ display: "none" }}
             >
-              <BookOpen className="w-16 h-16 text-primary/60" />
+              <BookOpen className="w-16 h-16 text-[#0096F0]/60" />
             </div>
           </>
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-            <BookOpen className="w-16 h-16 text-primary/60" />
+          <div className="w-full h-full bg-gradient-to-br from-[#0096F0]/20 to-[#DFB216]/20 flex items-center justify-center">
+            <BookOpen className="w-16 h-16 text-[#0096F0]/60" />
           </div>
         )}
 
-        {/* Badge niveau */}
         <div className="absolute top-4 left-4">
           <span
             className={`px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${
@@ -165,12 +160,11 @@ export default function Courses() {
           </span>
         </div>
 
-        {/* Badge statut */}
         <div className="absolute top-4 right-4">
           <span
             className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
               course.status === "PUBLISHED"
-                ? "bg-success/90 text-white"
+                ? "bg-green-600 text-white"
                 : "bg-yellow-100/90 text-yellow-700"
             }`}
           >
@@ -184,27 +178,22 @@ export default function Courses() {
         </div>
       </div>
 
-      {/* Contenu */}
       <Link to={`/course/${course.id}`} className="block">
         <div className="p-6">
-          {/* Catégorie */}
           <div className="mb-3">
-            <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-primary/10 text-primary">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-[#0096F0]/10 text-[#0096F0]">
               {course.categoryName ?? "Sans catégorie"}
             </span>
           </div>
 
-          {/* Titre */}
-          <h3 className="font-bold text-lg text-textPrimary mb-2 line-clamp-2 group-hover:text-primary transition-colors leading-tight">
+          <h3 className="font-bold text-lg text-gray-900 mb-2 line-clamp-2 group-hover:text-[#0096F0] transition-colors leading-tight">
             {course.title}
           </h3>
 
-          {/* Description */}
           <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
             {course.description}
           </p>
 
-          {/* Statistiques */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-1.5 text-gray-600">
@@ -219,14 +208,13 @@ export default function Courses() {
               </div>
             </div>
             <div className="flex items-center space-x-1">
-              <Star className="w-4 h-4 text-yellow-500 fill-current" />
-              <span className="text-sm font-bold text-textPrimary">
+              <Star className="w-4 h-4 text-[#DFB216] fill-current" />
+              <span className="text-sm font-bold text-gray-900">
                 {course.rating.toFixed(1)}
               </span>
             </div>
           </div>
 
-          {/* Date et bouton discret */}
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-1 text-xs text-gray-500">
               <Calendar className="w-3 h-3" />
@@ -241,7 +229,7 @@ export default function Courses() {
                   : "--"}
               </span>
             </div>
-            <div className="flex items-center space-x-1 text-primary opacity-60 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center space-x-1 text-[#0096F0] opacity-60 group-hover:opacity-100 transition-opacity">
               <span className="text-sm font-medium">Voir</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
@@ -249,10 +237,9 @@ export default function Courses() {
         </div>
       </Link>
 
-      {/* Badge popularité */}
       {course.students > 100 && (
         <div className="absolute top-2 left-1/2 transform -translate-x-1/2">
-          <div className="bg-accent text-white px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg">
+          <div className="bg-[#DFB216] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg">
             <Award className="w-3 h-3" />
             <span>Populaire</span>
           </div>
@@ -265,7 +252,6 @@ export default function Courses() {
     <div className="group bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg hover:border-gray-300 transition-all duration-200">
       <Link to={`/course/${course.id}`} className="block">
         <div className="flex p-3  gap-6">
-          {/* Image simplifiée */}
           <div className="relative w-48 h-34 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
             {course.coverImage ? (
               <>
@@ -297,7 +283,6 @@ export default function Courses() {
               </div>
             )}
 
-            {/* Badge niveau simple */}
             <div className="absolute top-2 left-2">
               <span
                 className={`px-2 py-1 rounded text-xs font-medium ${
@@ -313,37 +298,30 @@ export default function Courses() {
             </div>
           </div>
 
-          {/* Contenu principal */}
           <div className="flex-1 flex flex-col justify-between min-h-[128px]">
-            {/* Section haute: Catégorie + Titre + Description */}
             <div className="space-y-3">
-              {/* Catégorie */}
               <div className="flex items-center gap-3 flex-wrap">
-                <span className="text-sm text-primary font-medium bg-primary/10 px-3 py-1 rounded-full">
+                <span className="text-sm text-[#0096F0] font-medium bg-[#0096F0]/10 px-3 py-1 rounded-full">
                   {course.categoryName || "Sans catégorie"}
                 </span>
                 {course.students > 100 && (
-                  <span className="text-xs text-orange-600 font-medium bg-orange-50 px-2 py-1 rounded-full flex items-center gap-1">
+                  <span className="text-xs text-[#DFB216] font-medium bg-amber-50 px-2 py-1 rounded-full flex items-center gap-1">
                     <Award className="w-3 h-3" />
                     Populaire
                   </span>
                 )}
               </div>
 
-              {/* Titre */}
-              <h3 className="font-semibold text-xl text-gray-900 group-hover:text-primary transition-colors line-clamp-2 leading-snug">
+              <h3 className="font-semibold text-xl text-gray-900 group-hover:text-[#0096F0] transition-colors line-clamp-2 leading-snug">
                 {course.title}
               </h3>
 
-              {/* Description */}
               <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
                 {course.description}
               </p>
             </div>
 
-            {/* Section basse: Métadonnées */}
             <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-              {/* Statistiques à gauche */}
               <div className="flex items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-1.5">
                   <Users className="w-4 h-4" />
@@ -354,16 +332,15 @@ export default function Courses() {
                   <span>{course.duration}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                  <Star className="w-4 h-4 text-[#DFB216] fill-current" />
                   <span className="text-gray-900 font-medium">
                     {course.rating.toFixed(1)}
                   </span>
                 </div>
               </div>
 
-              {/* Statut à droite */}
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="flex items-center gap-1 text-[#0096F0] opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-sm font-medium">Voir le cours</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -378,7 +355,7 @@ export default function Courses() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin text-primary" />
+        <Loader2 className="w-12 h-12 animate-spin text-[#0096F0]" />
       </div>
     );
   }
@@ -398,20 +375,18 @@ export default function Courses() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral">
-      {/* Hero Section avec recherche */}
-      <section className="bg-gradient-to-r from-neutral via-white to-neutral py-16">
+    <div className="min-h-screen bg-gray-50">
+      <section className="bg-gradient-to-r from-gray-50 via-white to-gray-50 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl lg:text-5xl font-bold text-textPrimary mb-6">
-              Explorez Nos <span className="text-primary">Formations</span>
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              Explorez Nos <span className="text-[#0096F0]">Formations</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               Découvrez des cours conçus par des experts pour faire grandir vos
               compétences et accélérer votre carrière.
             </p>
 
-            {/* Barre de recherche améliorée */}
             <div className="max-w-2xl mx-auto relative mb-8">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -419,11 +394,10 @@ export default function Courses() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Rechercher un cours, une compétence..."
-                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary transition-all text-lg shadow-sm"
+                className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-all text-lg shadow-sm"
               />
             </div>
 
-            {/* Tags catégories rapides */}
             <div className="flex flex-wrap justify-center gap-3">
               {categories.slice(0, 5).map((category) => {
                 const IconComponent = BookOpen;
@@ -433,8 +407,8 @@ export default function Courses() {
                     onClick={() => setSelectedCategory(category.id)}
                     className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                       selectedCategory === category.id
-                        ? "bg-primary text-white"
-                        : "bg-white text-gray-700 hover:bg-primary hover:text-white border border-gray-200"
+                        ? "bg-[#0096F0] text-white"
+                        : "bg-white text-gray-700 hover:bg-[#0096F0] hover:text-white border border-gray-200"
                     }`}
                   >
                     <IconComponent className="w-4 h-4" />
@@ -449,25 +423,23 @@ export default function Courses() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Sidebar Filters */}
           <div className="hidden lg:block w-72 flex-shrink-0">
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-textPrimary flex items-center space-x-2">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
                   <Filter className="w-5 h-5" />
                   <span>Filtres</span>
                 </h2>
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
+                    className="text-sm text-[#0096F0] hover:text-[#0080D6] transition-colors font-medium"
                   >
                     Tout effacer
                   </button>
                 )}
               </div>
 
-              {/* Filtres par catégorie avec icônes */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
                   Catégorie
@@ -483,9 +455,9 @@ export default function Courses() {
                       value="all"
                       checked={selectedCategory === "all"}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                      className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                     />
-                    <div className="ml-3 flex items-center space-x-2 group-hover:text-primary transition-colors">
+                    <div className="ml-3 flex items-center space-x-2 group-hover:text-[#0096F0] transition-colors">
                       <BookOpen className="w-4 h-4" />
                       <span className="text-sm">Toutes les catégories</span>
                     </div>
@@ -503,9 +475,9 @@ export default function Courses() {
                           value={category.id}
                           checked={selectedCategory === category.id}
                           onChange={(e) => setSelectedCategory(e.target.value)}
-                          className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                          className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                         />
-                        <div className="ml-3 flex items-center space-x-2 group-hover:text-primary transition-colors">
+                        <div className="ml-3 flex items-center space-x-2 group-hover:text-[#0096F0] transition-colors">
                           <IconComponent className="w-4 h-4" />
                           <span className="text-sm">{category.name}</span>
                         </div>
@@ -515,7 +487,6 @@ export default function Courses() {
                 </div>
               </div>
 
-              {/* Filtre par niveau */}
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
                   Niveau
@@ -532,9 +503,9 @@ export default function Courses() {
                         value={level}
                         checked={selectedLevel === level}
                         onChange={(e) => setSelectedLevel(e.target.value)}
-                        className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                        className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                       />
-                      <span className="ml-3 text-sm group-hover:text-primary transition-colors">
+                      <span className="ml-3 text-sm group-hover:text-[#0096F0] transition-colors">
                         {level === "all"
                           ? "Tous les niveaux"
                           : courseService.getLevelLabel(level)}
@@ -546,7 +517,6 @@ export default function Courses() {
             </div>
           </div>
 
-          {/* Mobile Filter Button */}
           <div className="lg:hidden flex items-center justify-between">
             <button
               onClick={() => setShowFilters(true)}
@@ -555,31 +525,28 @@ export default function Courses() {
               <Filter className="w-4 h-4" />
               <span>Filtres</span>
               {hasActiveFilters && (
-                <span className="w-2 h-2 bg-primary rounded-full"></span>
+                <span className="w-2 h-2 bg-[#0096F0] rounded-full"></span>
               )}
             </button>
           </div>
 
-          {/* Contenu principal */}
           <div className="flex-1">
-            {/* Header avec résultats et TOGGLE GRILLE/LISTE */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
               <div className="flex items-center justify-between w-full ">
                 <p className="text-gray-400  text-sm  ">
-                  <span className="text-textPrimary font-bold">
+                  <span className="text-gray-900 font-bold">
                     {filteredCourses.length}
                   </span>{" "}
                   cours trouvé{filteredCourses.length > 1 ? "s" : ""}
                 </p>
 
-                {/* 🆕 BOUTONS DE BASCULEMENT VUE */}
                 <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
                   <button
                     onClick={() => setViewMode("list")}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all ${
                       viewMode === "list"
-                        ? "bg-primary text-white shadow-sm"
-                        : "text-gray-600 hover:text-primary hover:bg-gray-50"
+                        ? "bg-[#0096F0] text-white shadow-sm"
+                        : "text-gray-600 hover:text-[#0096F0] hover:bg-gray-50"
                     }`}
                     title="Vue liste"
                   >
@@ -590,8 +557,8 @@ export default function Courses() {
                     onClick={() => setViewMode("grid")}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all ${
                       viewMode === "grid"
-                        ? "bg-primary text-white shadow-sm"
-                        : "text-gray-600 hover:text-primary hover:bg-gray-50"
+                        ? "bg-[#0096F0] text-white shadow-sm"
+                        : "text-gray-600 hover:text-[#0096F0] hover:bg-gray-50"
                     }`}
                     title="Vue grille"
                   >
@@ -601,40 +568,39 @@ export default function Courses() {
                 </div>
               </div>
 
-              {/* Filtres actifs */}
               {hasActiveFilters && (
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm text-gray-500 font-medium">
                     Filtres actifs:
                   </span>
                   {searchQuery && (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#0096F0]/10 text-[#0096F0] border border-[#0096F0]/20">
                       "{searchQuery}"
                       <button
                         onClick={() => setSearchQuery("")}
-                        className="ml-1 hover:text-primary/80"
+                        className="ml-1 hover:text-[#0096F0]/80"
                       >
                         <X className="w-3 h-3" />
                       </button>
                     </span>
                   )}
                   {selectedCategory !== "all" && (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-accent/10 text-accent border border-accent/20">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#DFB216]/10 text-[#DFB216] border border-[#DFB216]/20">
                       {categories.find((c) => c.id === selectedCategory)?.name}
                       <button
                         onClick={() => setSelectedCategory("all")}
-                        className="ml-1 hover:text-accent/80"
+                        className="ml-1 hover:text-[#DFB216]/80"
                       >
                         <X className="w-3 h-3" />
                       </button>
                     </span>
                   )}
                   {selectedLevel !== "all" && (
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-success/10 text-success border border-success/20">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
                       {courseService.getLevelLabel(selectedLevel)}
                       <button
                         onClick={() => setSelectedLevel("all")}
-                        className="ml-1 hover:text-success/80"
+                        className="ml-1 hover:text-green-600"
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -644,10 +610,8 @@ export default function Courses() {
               )}
             </div>
 
-            {/* 🆕 AFFICHAGE CONDITIONNEL SELON LE MODE VUE */}
             {filteredCourses.length > 0 ? (
               <>
-                {/* Vue Grille */}
                 {viewMode === "grid" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredCourses.map((course) => (
@@ -656,7 +620,6 @@ export default function Courses() {
                   </div>
                 )}
 
-                {/* Vue Liste */}
                 {viewMode === "list" && (
                   <div className="space-y-4">
                     {filteredCourses.map((course) => (
@@ -670,7 +633,7 @@ export default function Courses() {
                 <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                   <Search className="w-12 h-12 text-gray-400" />
                 </div>
-                <h3 className="text-2xl font-bold text-textPrimary mb-2">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
                   Aucun cours trouvé
                 </h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
@@ -679,7 +642,7 @@ export default function Courses() {
                 </p>
                 <button
                   onClick={clearFilters}
-                  className="bg-primary text-white px-8 py-3 rounded-xl hover:bg-primary/90 transition-colors font-semibold"
+                  className="bg-[#0096F0] text-white px-8 py-3 rounded-xl hover:bg-[#0080D6] transition-colors font-semibold"
                 >
                   Effacer tous les filtres
                 </button>
@@ -689,7 +652,6 @@ export default function Courses() {
         </div>
       </div>
 
-      {/* Modal filtres mobile */}
       {showFilters && (
         <div className="fixed inset-0 z-50 lg:hidden">
           <div
@@ -698,9 +660,7 @@ export default function Courses() {
           />
           <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-white shadow-xl">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-textPrimary">
-                Filtres
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900">Filtres</h2>
               <button
                 onClick={() => setShowFilters(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -710,7 +670,6 @@ export default function Courses() {
             </div>
 
             <div className="p-6 space-y-6 overflow-y-auto h-full pb-24">
-              {/* Filtres mobiles identiques */}
               <div>
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
                   Catégorie
@@ -726,7 +685,7 @@ export default function Courses() {
                       value="all"
                       checked={selectedCategory === "all"}
                       onChange={(e) => setSelectedCategory(e.target.value)}
-                      className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                      className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                     />
                     <div className="ml-3 flex items-center space-x-2">
                       <BookOpen className="w-4 h-4" />
@@ -743,7 +702,7 @@ export default function Courses() {
                           value={category.id}
                           checked={selectedCategory === category.id}
                           onChange={(e) => setSelectedCategory(e.target.value)}
-                          className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                          className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                         />
                         <div className="ml-3 flex items-center space-x-2">
                           <IconComponent className="w-4 h-4" />
@@ -768,7 +727,7 @@ export default function Courses() {
                         value={level}
                         checked={selectedLevel === level}
                         onChange={(e) => setSelectedLevel(e.target.value)}
-                        className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                        className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                       />
                       <span className="ml-3 text-sm">
                         {level === "all"
@@ -793,7 +752,7 @@ export default function Courses() {
                         value={duration}
                         checked={selectedDuration === duration}
                         onChange={(e) => setSelectedDuration(e.target.value)}
-                        className="w-4 h-4 text-primary focus:ring-primary border-gray-300"
+                        className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                       />
                       <span className="ml-3 text-sm">
                         {duration === "all" ? "Toutes durées" : duration}
@@ -814,7 +773,7 @@ export default function Courses() {
                 </button>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="flex-1 px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors font-medium"
+                  className="flex-1 px-4 py-3 bg-[#0096F0] text-white rounded-xl hover:bg-[#0080D6] transition-colors font-medium"
                 >
                   Appliquer
                 </button>

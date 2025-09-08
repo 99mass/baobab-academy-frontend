@@ -18,28 +18,13 @@ import AdminDashboard from "./pages/AdminDashboard";
 import CourseEditor from "./pages/CourseEditor";
 import Profile from "./pages/Profile";
 
-function Loading() {
-  return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="flex flex-col items-center space-y-4">
-        <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-gray-600">Chargement...</p>
-      </div>
-    </div>
-  );
-}
-
 interface ProtectedRouteProps {
   children: ReactNode;
   adminOnly?: boolean;
 }
 
 function ProtectedRoute({ children, adminOnly = false }: ProtectedRouteProps) {
-  const { isAuthenticated, user, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated) {
     return <Navigate to="/auth" replace />;
@@ -52,7 +37,6 @@ function ProtectedRoute({ children, adminOnly = false }: ProtectedRouteProps) {
   return <>{children}</>;
 }
 
-// Composant pour rediriger les utilisateurs connectés (SANS Loading)
 interface PublicRouteProps {
   children: ReactNode;
 }

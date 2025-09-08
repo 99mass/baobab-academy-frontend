@@ -27,20 +27,16 @@ export default function Home() {
       try {
         setLoading(true);
 
-        // Récupérer les cours publiés
         const courseResponse = await courseService.getPublishedCourses();
         if (courseResponse.success && courseResponse.data) {
-          // Prendre les 3 cours les plus populaires (plus d'étudiants)
           const popularCourses = courseResponse.data.content
             .sort((a, b) => b.students - a.students)
             .slice(0, 3);
           setCourses(popularCourses);
         }
 
-        // Récupérer les catégories
         const categoryResponse = await courseService.getCategories();
         if (categoryResponse.success && categoryResponse.data) {
-          // Utiliser toutes les catégories disponibles
           setCategories(categoryResponse.data);
         }
       } catch (error) {
@@ -53,7 +49,6 @@ export default function Home() {
     fetchData();
   }, []);
 
-  // Fonction pour obtenir l'URL de l'image
   const getImageUrl = (coverImage: string | undefined) => {
     if (!coverImage) return null;
 
@@ -70,21 +65,20 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Section avec Image */}
+      {/* Hero Section */}
       <section className="relative bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center py-16 lg:py-24">
-            {/* Contenu texte */}
             <div className="order-2 lg:order-1 animate-fade-in-up">
-              <div className="inline-flex items-center bg-success/10 text-success px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-in">
-                <span className="w-2 h-2 bg-success rounded-full mr-2 animate-pulse"></span>
-                Bienvenue sur Baobab Academy
+              <div className="inline-flex items-center bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-in">
+                <span className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></span>
+                Bienvenue sur FIBEM
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold text-textPrimary mb-6 leading-tight animate-slide-in-left">
+              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight animate-slide-in-left">
                 Cultivez votre savoir avec
-                <span className="text-primary block animate-text-gradient">
-                  Baobab Academy
+                <span className="text-transparent bg-gradient-to-r from-[#0096F0] to-[#CD010A] bg-clip-text block animate-text-gradient">
+                  FIBEM
                 </span>
               </h1>
 
@@ -97,41 +91,38 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row gap-4 mb-8 animate-fade-in opacity-0 animation-delay-400">
                 <Link
                   to="/courses"
-                  className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 group"
+                  className="bg-[#0096F0] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 group"
                 >
                   <span>Explorer nos cours</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
-                {/* Bouton Créer un compte - masqué si connecté */}
                 {!isAuthenticated && (
                   <Link
                     to="/auth"
-                    className="border-2 border-primary text-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 text-center"
+                    className="border-2 border-[#0096F0] text-[#0096F0] px-8 py-4 rounded-lg font-semibold hover:bg-[#0096F0] hover:text-white transition-all duration-300 hover:scale-105 text-center"
                   >
                     Créer un compte gratuit
                   </Link>
                 )}
               </div>
 
-              {/* Petites stats */}
               <div className="flex items-center space-x-6 text-sm text-gray-600 animate-fade-in opacity-0 animation-delay-600">
-                <div className="flex items-center space-x-2 hover:text-primary transition-colors cursor-pointer group">
+                <div className="flex items-center space-x-2 hover:text-[#0096F0] transition-colors cursor-pointer group">
                   <Users className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   <span>5000+ étudiants</span>
                 </div>
-                <div className="flex items-center space-x-2 hover:text-primary transition-colors cursor-pointer group">
-                  <Star className="w-4 h-4 text-accent fill-current group-hover:scale-110 transition-transform" />
+                <div className="flex items-center space-x-2 hover:text-[#0096F0] transition-colors cursor-pointer group">
+                  <Star className="w-4 h-4 text-[#DFB216] fill-current group-hover:scale-110 transition-transform" />
                   <span>4.8/5 moyenne</span>
                 </div>
-                <div className="flex items-center space-x-2 hover:text-primary transition-colors cursor-pointer group">
+                <div className="flex items-center space-x-2 hover:text-[#0096F0] transition-colors cursor-pointer group">
                   <BookOpen className="w-4 h-4 group-hover:scale-110 transition-transform" />
                   <span>100+ cours</span>
                 </div>
               </div>
             </div>
 
-            {/* Image Hero */}
             <div className="order-1 lg:order-2 animate-slide-in-right">
               <div className="relative">
                 <img
@@ -139,17 +130,14 @@ export default function Home() {
                   alt="Étudiants apprenant ensemble"
                   className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-500"
                 />
-                {/* Petites cartes flottantes */}
                 <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg animate-float">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-success/10 rounded-full flex items-center justify-center">
-                      <Award className="w-5 h-5 text-success animate-bounce-slow" />
+                    <div className="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center">
+                      <Award className="w-5 h-5 text-green-600 animate-bounce-slow" />
                     </div>
                     <div>
                       <p className="font-semibold text-sm">95% de réussite</p>
-                      <p className="text-xs text-gray-500">
-                        Taux de réussite
-                      </p>
+                      <p className="text-xs text-gray-500">Taux de réussite</p>
                     </div>
                   </div>
                 </div>
@@ -160,16 +148,14 @@ export default function Home() {
       </section>
 
       {/* Section de recherche */}
-      <section className="py-16 bg-neutral">
+      <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
-          <h2 className="text-2xl font-bold text-textPrimary mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">
             Que souhaitez-vous apprendre aujourd'hui ?
           </h2>
 
-          {/* Tags populaires avec toutes les catégories de l'API */}
           <div className="flex flex-wrap justify-center gap-3 mt-6">
             {loading ? (
-              // Tags de chargement (nombre variable selon l'API)
               [1, 2, 3, 4, 5, 6].map((_, index) => (
                 <div
                   key={index}
@@ -177,12 +163,11 @@ export default function Home() {
                 />
               ))
             ) : categories.length > 0 ? (
-              // Toutes les catégories de l'API
               categories.map((category, index) => (
                 <Link
                   key={category.id}
                   to={`/courses?category=${category.id}`}
-                  className="px-4 py-2 bg-white text-gray-700 rounded-full text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-lg animate-fade-in opacity-0"
+                  className="px-4 py-2 bg-white text-gray-700 rounded-full text-sm font-medium hover:bg-[#0096F0] hover:text-white transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-lg animate-fade-in opacity-0"
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {category.name}
@@ -195,11 +180,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Cours populaires avec vraies données */}
+      {/* Cours populaires */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 animate-fade-in-up">
-            <h2 className="text-3xl font-bold text-textPrimary mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Cours les plus populaires
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -210,7 +195,7 @@ export default function Home() {
 
           {loading ? (
             <div className="flex justify-center items-center py-16">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#0096F0]" />
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -238,17 +223,17 @@ export default function Home() {
                     </div>
                     <div className="p-6">
                       <div className="flex items-center space-x-2 mb-3">
-                        <span className="bg-accent/10 text-accent px-3 py-1 rounded-full text-xs font-medium group-hover:bg-accent group-hover:text-white transition-colors">
+                        <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-medium group-hover:bg-[#DFB216] group-hover:text-white transition-colors">
                           {course.categoryName || "Design"}
                         </span>
                         <div className="flex items-center space-x-1">
-                          <Star className="w-4 h-4 text-accent fill-current group-hover:scale-110 transition-transform" />
+                          <Star className="w-4 h-4 text-[#DFB216] fill-current group-hover:scale-110 transition-transform" />
                           <span className="text-sm text-gray-600">
                             {course.rating.toFixed(1)}
                           </span>
                         </div>
                       </div>
-                      <h3 className="font-bold text-lg text-textPrimary mb-2 group-hover:text-primary transition-colors">
+                      <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-[#0096F0] transition-colors">
                         {course.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4">
@@ -274,7 +259,7 @@ export default function Home() {
           <div className="text-center animate-fade-in-up">
             <Link
               to="/courses"
-              className="inline-flex items-center space-x-2 bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary/90 transition-all duration-300 hover:scale-105 hover:shadow-lg group"
+              className="inline-flex items-center space-x-2 bg-[#0096F0] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 hover:shadow-lg group"
             >
               <span>Voir tous les cours</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -284,11 +269,11 @@ export default function Home() {
       </section>
 
       {/* Section témoignages */}
-      <section className="py-20 bg-neutral">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in-up">
-            <h2 className="text-3xl font-bold text-textPrimary mb-4">
-              Ils ont réussi avec Baobab Academy
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Ils ont réussi avec FIBEM
             </h2>
             <p className="text-xl text-gray-600">
               Découvrez les témoignages de nos diplômés qui ont transformé leur
@@ -297,7 +282,6 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Témoignage 1 */}
             <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-in-up opacity-0 animation-delay-200">
               <div className="flex items-center space-x-4 mb-4">
                 <img
@@ -306,26 +290,25 @@ export default function Home() {
                   className="w-12 h-12 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                 />
                 <div>
-                  <p className="font-semibold text-textPrimary">Aminata Diop</p>
+                  <p className="font-semibold text-gray-900">Aminata Diop</p>
                   <p className="text-sm text-gray-600">Développeuse Web</p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                "Grâce à Baobab Academy, j'ai pu me reconvertir dans le
-                développement web. Les cours sont bien structurés et les mentors
-                très disponibles."
+                "Grâce à FIBEM, j'ai pu me reconvertir dans le développement
+                web. Les cours sont bien structurés et les mentors très
+                disponibles."
               </p>
               <div className="flex items-center mt-4">
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-4 h-4 text-accent fill-current hover:scale-110 transition-transform"
+                    className="w-4 h-4 text-[#DFB216] fill-current hover:scale-110 transition-transform"
                   />
                 ))}
               </div>
             </div>
 
-            {/* Témoignage 2 */}
             <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-in-up opacity-0 animation-delay-400">
               <div className="flex items-center space-x-4 mb-4">
                 <img
@@ -334,7 +317,7 @@ export default function Home() {
                   className="w-12 h-12 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                 />
                 <div>
-                  <p className="font-semibold text-textPrimary">Mamadou Sall</p>
+                  <p className="font-semibold text-gray-900">Mamadou Sall</p>
                   <p className="text-sm text-gray-600">UX Designer</p>
                 </div>
               </div>
@@ -347,13 +330,12 @@ export default function Home() {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-4 h-4 text-accent fill-current hover:scale-110 transition-transform"
+                    className="w-4 h-4 text-[#DFB216] fill-current hover:scale-110 transition-transform"
                   />
                 ))}
               </div>
             </div>
 
-            {/* Témoignage 3 */}
             <div className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-in-up opacity-0 animation-delay-600">
               <div className="flex items-center space-x-4 mb-4">
                 <img
@@ -362,7 +344,7 @@ export default function Home() {
                   className="w-12 h-12 rounded-full object-cover hover:scale-110 transition-transform duration-300"
                 />
                 <div>
-                  <p className="font-semibold text-textPrimary">Fatou Ndiaye</p>
+                  <p className="font-semibold text-gray-900">Fatou Ndiaye</p>
                   <p className="text-sm text-gray-600">Data Analyst</p>
                 </div>
               </div>
@@ -375,7 +357,7 @@ export default function Home() {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className="w-4 h-4 text-accent fill-current hover:scale-110 transition-transform"
+                    className="w-4 h-4 text-[#DFB216] fill-current hover:scale-110 transition-transform"
                   />
                 ))}
               </div>
@@ -385,21 +367,20 @@ export default function Home() {
       </section>
 
       {/* CTA Final */}
-      <section className="py-20 text-primary bg-neutral">
+      <section className="py-20 text-[#0096F0] bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
           <h2 className="text-xl lg:text-4xl font-bold mb-6">
             Commencez votre transformation professionnelle dès aujourd'hui
           </h2>
-          <p className="text-md mb-8 text-black/70">
+          <p className="text-md mb-8 text-gray-700">
             Rejoignez notre communauté d'apprenants et développez les
             compétences qui feront la différence dans votre carrière.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            {/* Bouton CTA - masqué si connecté */}
             {!isAuthenticated ? (
               <Link
                 to="/auth"
-                className="bg-accent text-white/90 px-8 py-4 rounded-lg font-semibold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
+                className="bg-[#DFB216] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#C9A015] transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
               >
                 <span>Créer mon compte gratuit</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -407,7 +388,7 @@ export default function Home() {
             ) : (
               <Link
                 to="/profile"
-                className="bg-accent text-white/90 px-8 py-4 rounded-lg font-semibold hover:bg-accent/90 transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
+                className="bg-[#DFB216] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#C9A015] transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
               >
                 <span>Accéder à mon tableau de bord</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -415,7 +396,7 @@ export default function Home() {
             )}
             <Link
               to="/courses"
-              className="border border-primary text-primary px-8 py-4 rounded-lg font-semibold hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105 text-center"
+              className="border border-[#0096F0] text-[#0096F0] px-8 py-4 rounded-lg font-semibold hover:bg-[#0096F0] hover:text-white transition-all duration-300 hover:scale-105 text-center"
             >
               Découvrir nos formations
             </Link>

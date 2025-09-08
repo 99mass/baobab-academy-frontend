@@ -1,4 +1,3 @@
-// pages/Auth.tsx
 import { useState, type FormEvent, type ChangeEvent, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -41,7 +40,6 @@ export default function Auth() {
       console.log('Utilisateur authentifié détecté:', user);
       console.log('Rôle de l\'utilisateur:', user.role);
       
-      // Redirection selon le rôle
       if (user.role === 'ADMIN') {
         console.log('Redirection vers /admin');
         navigate('/admin');
@@ -60,7 +58,6 @@ export default function Auth() {
 
    try {
     if (isLogin) {
-      // Connexion
       await login({
         email: formData.email,
         password: formData.password,
@@ -69,7 +66,6 @@ export default function Auth() {
       console.log('Login successful');
       
     } else {
-      // Inscription
       await register({
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -84,23 +80,18 @@ export default function Auth() {
     } catch (error) {
       console.error("Erreur d'authentification:", error);
 
-      // ORDRE CORRIGÉ : vérifier d'abord les erreurs Axios spécifiques
       if (error instanceof AxiosError) {
-        // 1. Erreur du serveur avec message spécifique
         if (error.response?.data?.message) {
           setError(error.response.data.message);
         }
-        // 2. Erreurs de validation de champs
         else if (error.response?.data?.fieldErrors) {
           setFieldErrors(error.response.data.fieldErrors);
         }
-        // 3. Erreurs HTTP spécifiques par code de statut
         else if (error.response?.status === 401) {
           setError("Email ou mot de passe incorrect");
         } else if (error.response?.status === 400) {
           setError("Données invalides. Veuillez vérifier vos informations.");
         }
-        // 4. Erreur de réseau
         else if (
           error.code === "NETWORK_ERROR" ||
           error.message?.includes("Network Error")
@@ -109,23 +100,19 @@ export default function Auth() {
             "Erreur de connexion. Veuillez vérifier votre connexion internet."
           );
         }
-        // 5. Autres erreurs Axios
         else {
           setError(
             error.message || "Une erreur de communication s'est produite."
           );
         }
       }
-      // 6. Erreurs génériques (non-Axios)
       else if (error instanceof Error) {
         setError(error.message);
       }
-      // 7. Erreur inconnue
       else {
         setError("Une erreur inattendue s'est produite. Veuillez réessayer.");
       }
     } finally {
-      // IMPORTANT: Toujours réinitialiser isSubmitting
       setIsSubmitting(false);
     }
   };
@@ -137,7 +124,6 @@ export default function Auth() {
       [name]: value,
     }));
 
-    // Effacer l'erreur du champ quand l'utilisateur tape
     if (fieldErrors[name]) {
       setFieldErrors((prev) => ({
         ...prev,
@@ -145,7 +131,6 @@ export default function Auth() {
       }));
     }
 
-    // Effacer l'erreur globale aussi
     if (error) {
       setError("");
     }
@@ -169,7 +154,7 @@ export default function Auth() {
     const baseClasses =
       "w-full pl-12 pr-4 py-3 border-2 rounded-xl focus:outline-none transition-colors bg-white";
     const errorClasses = "border-red-300 focus:border-red-500";
-    const normalClasses = "border-gray-200 focus:border-primary";
+    const normalClasses = "border-gray-200 focus:border-[#0096F0]";
 
     return `${baseClasses} ${
       fieldErrors[fieldName] ? errorClasses : normalClasses
@@ -180,7 +165,7 @@ export default function Auth() {
     const baseClasses =
       "w-full pl-12 pr-14 py-3 border-2 rounded-xl focus:outline-none transition-colors bg-white";
     const errorClasses = "border-red-300 focus:border-red-500";
-    const normalClasses = "border-gray-200 focus:border-primary";
+    const normalClasses = "border-gray-200 focus:border-[#0096F0]";
 
     return `${baseClasses} ${
       fieldErrors[fieldName] ? errorClasses : normalClasses
@@ -189,26 +174,23 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen bg-white flex">
-      {/* Section gauche - Formulaire */}
       <div className="flex-1 flex items-center justify-center px-4 py-8 lg:px-8">
         <div className="max-w-md w-full">
-          {/* Logo */}
           <div className="mb-0">
             <Link to="/" className="inline-flex items-center group">
               <img
-                src="/logo.png"
-                alt="Baobab Academy Logo"
-                className="w-24 h-24"
+                src="/logo_fibem_no_bg.png"
+                alt="FIBEM Logo"
+                className="w-24 h-16"
               />
-              <span className="text-2xl font-bold text-primary">
-                Baobab Academy
+              <span className="text-2xl font-bold text-[#0096F0] pl-2">
+                FIBEM
               </span>
             </Link>
           </div>
 
-          {/* En-tête */}
           <div className="mb-8">
-            <h1 className="text-xl font-bold text-textPrimary mb-2">
+            <h1 className="text-xl font-bold text-gray-900 mb-2">
               {isLogin ? "Bon retour !" : "Rejoignez-nous"}
             </h1>
             <p className="text-gray-600 text-sm">
@@ -218,7 +200,6 @@ export default function Auth() {
             </p>
           </div>
 
-          {/* Affichage des erreurs globales */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center space-x-2">
               <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
@@ -226,15 +207,14 @@ export default function Auth() {
             </div>
           )}
 
-          {/* Toggle moderne */}
-          <div className="flex bg-neutral rounded-xl p-1 mb-8">
+          <div className="flex bg-gray-50 rounded-xl p-1 mb-8">
             <button
               type="button"
               onClick={toggleMode}
               disabled={isSubmitting}
               className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 isLogin
-                  ? "border border-primary text-primary shadow-sm"
+                  ? "border border-[#0096F0] text-[#0096F0] shadow-sm bg-white"
                   : "text-gray-500 hover:text-gray-700"
               } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
             >
@@ -246,7 +226,7 @@ export default function Auth() {
               disabled={isSubmitting}
               className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-200 ${
                 !isLogin
-                  ? "border border-primary text-primary shadow-sm"
+                  ? "border border-[#0096F0] text-[#0096F0] shadow-sm bg-white"
                   : "text-gray-500 hover:text-gray-700"
               } ${isSubmitting ? "opacity-50 cursor-not-allowed" : ""}`}
             >
@@ -254,9 +234,7 @@ export default function Auth() {
             </button>
           </div>
 
-          {/* Formulaire */}
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Champs nom/prénom pour l'inscription */}
             {!isLogin && (
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -316,7 +294,6 @@ export default function Auth() {
               </div>
             )}
 
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -343,7 +320,6 @@ export default function Auth() {
               )}
             </div>
 
-            {/* Mot de passe */}
             <div>
               <label
                 htmlFor="password"
@@ -384,7 +360,6 @@ export default function Auth() {
               )}
             </div>
 
-            {/* Confirmation mot de passe pour l'inscription */}
             {!isLogin && (
               <div>
                 <label
@@ -427,23 +402,10 @@ export default function Auth() {
               </div>
             )}
 
-            {/* Options pour la connexion */}
-            {isLogin && (
-              <div className="flex items-center justify-end">
-                <a
-                  href="#"
-                  className="text-sm text-primary hover:text-primary/80 transition-colors font-medium"
-                >
-                  Mot de passe oublié ?
-                </a>
-              </div>
-            )}
-
-            {/* Bouton de soumission */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-12 bg-primary text-white py-4 px-6 rounded-xl font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 bg-[#0096F0] text-white py-4 px-6 rounded-xl font-semibold hover:bg-[#0080D6] transition-colors flex items-center justify-center space-x-2 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>
@@ -458,20 +420,19 @@ export default function Auth() {
               )}
             </button>
 
-            {/* Conditions d'utilisation pour l'inscription */}
             {!isLogin && (
               <p className="text-sm text-gray-600 text-center leading-relaxed">
                 En créant un compte, vous acceptez nos{" "}
                 <a
                   href="#"
-                  className="text-primary hover:text-primary/80 transition-colors font-medium"
+                  className="text-[#0096F0] hover:text-[#0080D6] transition-colors font-medium"
                 >
                   Conditions d'utilisation
                 </a>{" "}
                 et notre{" "}
                 <a
                   href="#"
-                  className="text-primary hover:text-primary/80 transition-colors font-medium"
+                  className="text-[#0096F0] hover:text-[#0080D6] transition-colors font-medium"
                 >
                   Politique de confidentialité
                 </a>
@@ -479,7 +440,6 @@ export default function Auth() {
             )}
           </form>
 
-          {/* Retour à l'accueil */}
           <div className="mt-8 text-center">
             <Link
               to="/"
@@ -491,10 +451,8 @@ export default function Auth() {
         </div>
       </div>
 
-      {/* Section droite - Image/Contenu visuel */}
-      <div className="hidden lg:flex lg:flex-1 bg-neutral">
+      <div className="hidden lg:flex lg:flex-1 bg-gray-50">
         <div className="flex flex-col justify-center items-center px-12 py-16 text-center">
-          {/* Image principale */}
           <div className="mb-8">
             <img
               src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
@@ -503,37 +461,35 @@ export default function Auth() {
             />
           </div>
 
-          {/* Contenu motivationnel */}
           <div className="max-w-md">
-            <h2 className="text-xl font-bold text-textPrimary mb-4">
-              Développez vos compétences avec Baobab Academy
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Développez vos compétences avec FIBEM
             </h2>
             <p className="text-gray-600 text-sm mb-8 leading-relaxed">
               Rejoignez des milliers d'apprenants qui transforment leur carrière
               grâce à nos formations expertes et certifiantes.
             </p>
 
-            {/* Statistiques */}
             <div className="grid grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <BookOpen className="w-6 h-6 text-primary" />
+                <div className="w-12 h-12 bg-[#0096F0]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <BookOpen className="w-6 h-6 text-[#0096F0]" />
                 </div>
-                <p className="font-bold text-2xl text-textPrimary">100+</p>
+                <p className="font-bold text-2xl text-gray-900">100+</p>
                 <p className="text-sm text-gray-600">Cours</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Users className="w-6 h-6 text-accent" />
+                <div className="w-12 h-12 bg-[#DFB216]/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-6 h-6 text-[#DFB216]" />
                 </div>
-                <p className="font-bold text-2xl text-textPrimary">5K+</p>
+                <p className="font-bold text-2xl text-gray-900">5K+</p>
                 <p className="text-sm text-gray-600">Étudiants</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-success/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Award className="w-6 h-6 text-success" />
+                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mx-auto mb-3">
+                  <Award className="w-6 h-6 text-green-600" />
                 </div>
-                <p className="font-bold text-2xl text-textPrimary">95%</p>
+                <p className="font-bold text-2xl text-gray-900">95%</p>
                 <p className="text-sm text-gray-600">Satisfaction</p>
               </div>
             </div>

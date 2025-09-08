@@ -1,7 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// /* eslint-disable react-hooks/exhaustive-deps */
-// /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -14,7 +12,7 @@ import {
   ChevronDown,
   ArrowLeft,
   Users,
-  X, // Added X icon for close button
+  X,
 } from "lucide-react";
 import { courseService } from "../services/courseService";
 import { useAuth } from "../hooks/useAuth";
@@ -30,7 +28,6 @@ interface CourseWithProgress {
   isAdmin?: boolean;
 }
 
-// Modal Component
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -70,8 +67,6 @@ export default function CourseDetail() {
   const [totalRatings, setTotalRatings] = useState(0);
   const [showRatingSection, setShowRatingSection] = useState(false);
 
-  // Removed ratingComponentRef
-
   useEffect(() => {
     if (id) {
       loadCourse();
@@ -85,10 +80,9 @@ export default function CourseDetail() {
 
       if (isAuthenticated && user) {
         console.log(
-          "🔑 Utilisateur authentifié, chargement avec progression..."
+          "🔒 Utilisateur authentifié, chargement avec progression..."
         );
 
-        // Utiliser l'endpoint avec progression pour les utilisateurs connectés
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("Token non trouvé");
@@ -114,7 +108,6 @@ export default function CourseDetail() {
             setTotalRatings(result.data.course.totalRatings || 0);
             console.log("✅ Course data définie:", result.data);
 
-            // Ouvrir automatiquement le premier chapitre
             if (
               result.data.course?.chapters &&
               result.data.course.chapters.length > 0
@@ -127,7 +120,6 @@ export default function CourseDetail() {
         } else {
           console.error("❌ Erreur API:", response.status, response.statusText);
 
-          // Si l'endpoint authentifié échoue, essayer l'endpoint public
           console.log("🔄 Tentative avec endpoint public...");
           const publicResponse = await courseService.getPublishedCourseById(
             id || ""
@@ -144,7 +136,6 @@ export default function CourseDetail() {
       } else {
         console.log("🌐 Utilisateur non authentifié, chargement public...");
 
-        // Utiliser l'endpoint public pour les visiteurs
         const response = await courseService.getPublishedCourseById(id || "");
         const courseWithProgress = {
           course: response.data!,
@@ -156,7 +147,6 @@ export default function CourseDetail() {
         setCurrentRating(response.data?.rating || 0);
         setTotalRatings(response.data?.totalRatings || 0);
 
-        // Ouvrir automatiquement le premier chapitre
         if (response.data?.chapters && response.data.chapters.length > 0) {
           setExpandedChapter(response.data.chapters[0].id);
         }
@@ -201,25 +191,21 @@ export default function CourseDetail() {
         const result = await response.json();
         console.log("✅ Inscription réussie:", result);
 
-        // Afficher un message de succès
         alert(
           "🎉 Inscription réussie ! Vous pouvez maintenant commencer le cours."
         );
 
-        // Recharger les données du cours pour mettre à jour l'état d'inscription
         console.log("🔄 Rechargement des données du cours...");
         await loadCourse();
       } else {
         const errorData = await response.json();
         console.error("❌ Erreur inscription:", errorData);
 
-        // Gestion des erreurs spécifiques
         if (
           response.status === 400 &&
           errorData.message?.includes("déjà inscrit")
         ) {
           alert("ℹ️ Vous êtes déjà inscrit à ce cours !");
-          // Recharger quand même pour mettre à jour l'interface
           await loadCourse();
         } else {
           throw new Error(errorData.message || "Erreur lors de l'inscription");
@@ -228,7 +214,6 @@ export default function CourseDetail() {
     } catch (err: any) {
       console.error("❌ Erreur lors de l'inscription:", err);
 
-      // Messages d'erreur plus spécifiques
       let errorMessage = "Erreur lors de l'inscription";
 
       if (err.message.includes("Token")) {
@@ -244,7 +229,6 @@ export default function CourseDetail() {
 
       alert(errorMessage);
 
-      // Si c'est un problème de token, rediriger vers login
       if (err.message.includes("Token") || err.message.includes("401")) {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -297,29 +281,27 @@ export default function CourseDetail() {
     return courseData?.completedLessons || 0;
   };
 
-  // État de chargement
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-8 h-8 border-4 border-[#0096F0] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Chargement du cours...</p>
         </div>
       </div>
     );
   }
 
-  // État d'erreur
   if (error || !courseData) {
     return (
-      <div className="min-h-screen bg-neutral flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-textPrimary mb-4">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
             {error || "Cours non trouvé"}
           </h1>
           <Link
             to="/courses"
-            className="text-primary hover:text-primary/80 transition-colors"
+            className="text-[#0096F0] hover:text-[#0080D6] transition-colors"
           >
             Retour aux cours
           </Link>
@@ -328,25 +310,22 @@ export default function CourseDetail() {
     );
   }
 
-  const { course } = courseData; // ✅ Destructurer seulement course
+  const { course } = courseData;
 
-  // ✅ Accès direct aux propriétés pour éviter les undefined
   const enrolled = courseData.enrolled || false;
   const progressPercentage = courseData.progressPercentage || 0;
   const isAdmin = courseData.isAdmin || user?.role === "ADMIN" || false;
 
-  // 🔧 DEBUG DÉTAILLÉ
   console.log("🎯 Rendu avec:", {
     isAuthenticated,
     enrolled,
     isAdmin,
     userRole: user?.role,
     progressPercentage,
-    rawEnrolled: courseData.enrolled, // ✅ Vérifier la valeur brute
+    rawEnrolled: courseData.enrolled,
     courseDataFull: courseData,
   });
 
-  // 🔧 DEBUG SPÉCIFIQUE POUR L'ENROLLMENT CARD
   console.log("DEBUG Enrollment Card:", {
     condition1: enrolled,
     condition2: isAdmin,
@@ -356,24 +335,18 @@ export default function CourseDetail() {
   });
 
   const handleRatingUpdate = (newRating: number) => {
-    // When a user submits a new rating, we need to update the course's overall rating
-    // and total number of ratings. This is a simplified update for the UI.
-    // In a real application, you'd likely refetch the course data or get this from the API response.
     setCurrentRating(newRating);
     setTotalRatings((prevTotal) => prevTotal + 1);
-    setShowRatingSection(false); // Close modal after update
+    setShowRatingSection(false);
   };
 
   const handleRatingClick = () => {
     setShowRatingSection(true);
-    // No scrolling needed for modal
   };
 
   return (
-    <div className="min-h-screen bg-neutral">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50">
       <div className="relative">
-        {/* Hero Image */}
         <div className="h-96 bg-gradient-to-r from-black/60 to-black/40 relative overflow-hidden">
           {course.coverImage ? (
             <img
@@ -382,15 +355,13 @@ export default function CourseDetail() {
               className="w-full h-full object-cover absolute inset-0"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary/80 to-accent/80 absolute inset-0" />
+            <div className="w-full h-full bg-gradient-to-br from-[#0096F0]/80 to-[#DFB216]/80 absolute inset-0" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
 
-          {/* Content */}
           <div className="relative h-full flex items-end">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 w-full">
               <div className="max-w-4xl">
-                {/* Breadcrumb */}
                 <nav className="mb-4">
                   <Link
                     to="/courses"
@@ -401,9 +372,8 @@ export default function CourseDetail() {
                   </Link>
                 </nav>
 
-                {/* Course Info */}
                 <div className="mb-4">
-                  <span className="inline-block px-3 py-1 bg-accent/90 text-white rounded-full text-sm font-medium mb-4">
+                  <span className="inline-block px-3 py-1 bg-[#DFB216]/90 text-white rounded-full text-sm font-medium mb-4">
                     {course.categoryName || "Général"}
                   </span>
                 </div>
@@ -416,7 +386,6 @@ export default function CourseDetail() {
                   {course.description}
                 </p>
 
-                {/* Meta Info */}
                 <div className="flex flex-wrap items-center gap-6 text-white/90">
                   <div className="flex items-center space-x-2">
                     <Clock className="w-5 h-5" />
@@ -444,9 +413,9 @@ export default function CourseDetail() {
                   </div>
                   <button
                     onClick={handleRatingClick}
-                    className="flex items-center space-x-2 cursor-pointer hover:text-yellow-300 transition-colors"
+                    className="flex items-center space-x-2 cursor-pointer hover:text-[#DFB216] transition-colors"
                   >
-                    <Star className="w-5 h-5 text-yellow-400" />
+                    <Star className="w-5 h-5 text-[#DFB216]" />
                     <span>{currentRating.toFixed(1)}</span>
                   </button>
                 </div>
@@ -456,25 +425,22 @@ export default function CourseDetail() {
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-3 gap-12">
-          {/* Main Content */}
           <div className="lg:col-span-2">
-            {/* Progress Bar (if enrolled) */}
             {enrolled && !isAdmin && (
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-textPrimary">
+                  <h2 className="text-lg font-semibold text-gray-900">
                     Votre progression
                   </h2>
-                  <span className="text-primary font-medium">
+                  <span className="text-[#0096F0] font-medium">
                     {Math.round(progressPercentage)}%
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
                   <div
-                    className="bg-gradient-to-r from-primary to-success h-3 rounded-full transition-all duration-500"
+                    className="bg-gradient-to-r from-[#0096F0] to-green-500 h-3 rounded-full transition-all duration-500"
                     style={{ width: `${progressPercentage}%` }}
                   ></div>
                 </div>
@@ -485,7 +451,6 @@ export default function CourseDetail() {
               </div>
             )}
 
-            {/* Admin Info */}
             {isAdmin && (
               <div className="bg-purple-50 border border-purple-200 rounded-xl p-6 mb-8">
                 <div className="flex items-center space-x-3 mb-2">
@@ -503,31 +468,30 @@ export default function CourseDetail() {
               </div>
             )}
 
-            {/* Course Description */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
-              <h2 className="text-2xl font-bold text-textPrimary mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 À propos de ce cours
               </h2>
               <div className="prose prose-lg max-w-none text-gray-700">
                 <p className="mb-4">{course.description}</p>
 
-                <h3 className="text-xl font-semibold text-textPrimary mt-8 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-2">
                   Ce que vous allez apprendre
                 </h3>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
-                    <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     <span>Maîtriser les concepts fondamentaux du domaine</span>
                   </li>
                   <li className="flex items-start space-x-3">
-                    <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     <span>
                       Acquérir des compétences pratiques et applicables
                     </span>
                   </li>
                 </ul>
 
-                <h3 className="text-xl font-semibold text-textPrimary mt-8 mb-2">
+                <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-2">
                   Prérequis
                 </h3>
                 <ul className="space-y-2">
@@ -540,9 +504,8 @@ export default function CourseDetail() {
               </div>
             </div>
 
-            {/* Course Curriculum */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-              <h2 className="text-2xl font-bold text-textPrimary mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
                 Contenu du cours
               </h2>
 
@@ -557,13 +520,13 @@ export default function CourseDetail() {
                       className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
                     >
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
-                          <span className="text-primary font-medium text-sm">
+                        <div className="w-8 h-8 bg-[#0096F0]/10 rounded-lg flex items-center justify-center">
+                          <span className="text-[#0096F0] font-medium text-sm">
                             {chapter.orderIndex}
                           </span>
                         </div>
                         <div>
-                          <h3 className="font-semibold text-textPrimary">
+                          <h3 className="font-semibold text-gray-900">
                             {chapter.title}
                           </h3>
                           <p className="text-sm text-gray-600">
@@ -588,7 +551,7 @@ export default function CourseDetail() {
                             <div className="flex items-center space-x-3">
                               <Play className="w-5 h-5 text-gray-400" />
                               <div>
-                                <h4 className="font-medium text-textPrimary">
+                                <h4 className="font-medium text-gray-900">
                                   {lesson.title}
                                 </h4>
                                 <p className="text-sm text-gray-600">
@@ -603,7 +566,7 @@ export default function CourseDetail() {
                             {(enrolled || isAdmin) && (
                               <Link
                                 to={`/player/${course.id}/${lesson.id}`}
-                                className="text-primary hover:text-primary/80 transition-colors text-sm font-medium"
+                                className="text-[#0096F0] hover:text-[#0080D6] transition-colors text-sm font-medium"
                               >
                                 {isAdmin ? "Prévisualiser" : "Commencer"}
                               </Link>
@@ -621,35 +584,30 @@ export default function CourseDetail() {
                 )}
               </div>
             </div>
-
-            {/* Removed direct Course Rating Component rendering here */}
           </div>
 
-          {/* Sidebar */}
           <div className="lg:col-span-1">
             <div className="sticky top-24">
-              {/* Enrollment Card */}
               <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-6">
                 {enrolled || isAdmin ? (
                   <>
-                    <h3 className="text-xl font-bold text-textPrimary mb-6">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">
                       {isAdmin ? "Aperçu Administrateur" : "Votre parcours"}
                     </h3>
 
-                    {/* Progress - Seulement pour les utilisateurs vraiment inscrits */}
                     {enrolled && !isAdmin && (
                       <div className="mb-6">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-medium text-gray-700">
                             Progression
                           </span>
-                          <span className="text-sm font-medium text-primary">
+                          <span className="text-sm font-medium text-[#0096F0]">
                             {Math.round(progressPercentage)}%
                           </span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2">
                           <div
-                            className="bg-gradient-to-r from-primary to-success h-2 rounded-full transition-all duration-300"
+                            className="bg-gradient-to-r from-[#0096F0] to-green-500 h-2 rounded-full transition-all duration-300"
                             style={{ width: `${progressPercentage}%` }}
                           ></div>
                         </div>
@@ -658,7 +616,7 @@ export default function CourseDetail() {
 
                     <Link
                       to={`/player/${course.id}`}
-                      className="w-full bg-primary text-white py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors flex items-center justify-center space-x-2 mb-4"
+                      className="w-full bg-[#0096F0] text-white py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-colors flex items-center justify-center space-x-2 mb-4"
                     >
                       <Play className="w-5 h-5" />
                       <span>
@@ -673,7 +631,7 @@ export default function CourseDetail() {
                     {isAdmin ?? (
                       <Link
                         to={`/admin/course/edit/${course.id}`}
-                        className="w-full border border-primary text-primary py-3 rounded-lg font-medium hover:bg-primary/10 transition-colors text-center block"
+                        className="w-full border border-[#0096F0] text-[#0096F0] py-3 rounded-lg font-medium hover:bg-[#0096F0]/10 transition-colors text-center block"
                       >
                         ⚙️ Modifier le cours
                       </Link>
@@ -682,7 +640,7 @@ export default function CourseDetail() {
                 ) : (
                   <>
                     <div className="text-center mb-6">
-                      <div className="text-3xl font-bold text-textPrimary mb-2">
+                      <div className="text-3xl font-bold text-gray-900 mb-2">
                         Gratuit
                       </div>
                       <p className="text-gray-600">Accès illimité à vie</p>
@@ -692,7 +650,7 @@ export default function CourseDetail() {
                       <button
                         onClick={handleEnroll}
                         disabled={enrolling}
-                        className="w-full bg-primary text-white py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="w-full bg-[#0096F0] text-white py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-colors mb-4 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {enrolling ? (
                           <div className="flex items-center justify-center space-x-2">
@@ -708,7 +666,7 @@ export default function CourseDetail() {
                       </button>
                     ) : (
                       <Link to="/auth">
-                        <button className="w-full bg-primary text-white py-4 rounded-lg font-semibold hover:bg-primary/90 transition-colors mb-4">
+                        <button className="w-full bg-[#0096F0] text-white py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-colors mb-4">
                           S'inscrire gratuitement
                         </button>
                       </Link>
@@ -720,11 +678,11 @@ export default function CourseDetail() {
 
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center space-x-3">
-                        <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                         <span>Accès illimité au cours</span>
                       </div>
                       <div className="flex items-center space-x-3">
-                        <CheckCircle className="w-5 h-5 text-success flex-shrink-0" />
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
                         <span>Ressources téléchargeables</span>
                       </div>
                     </div>
@@ -732,9 +690,8 @@ export default function CourseDetail() {
                 )}
               </div>
 
-              {/* Course Stats */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 className="font-semibold text-textPrimary mb-4">
+                <h3 className="font-semibold text-gray-900 mb-4">
                   Informations du cours
                 </h3>
 
@@ -780,7 +737,6 @@ export default function CourseDetail() {
         </div>
       </div>
 
-      {/* Course Rating Modal */}
       {id && (
         <Modal isOpen={showRatingSection} onClose={() => setShowRatingSection(false)}>
           <CourseRatingComponent
@@ -790,8 +746,8 @@ export default function CourseDetail() {
             currentRating={currentRating}
             totalRatings={totalRatings}
             onRatingUpdate={handleRatingUpdate}
-            initialShowForm={true} // Always show form when modal is open
-            onClose={() => setShowRatingSection(false)} // Pass onClose to component
+            initialShowForm={true}
+            onClose={() => setShowRatingSection(false)}
           />
         </Modal>
       )}
