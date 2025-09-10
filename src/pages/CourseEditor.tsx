@@ -643,9 +643,9 @@ export default function CourseEditor() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-[#0096F0] border-t-transparent rounded-full animate-spin"></div>
           <p className="text-gray-600">Chargement du cours...</p>
         </div>
       </div>
@@ -653,20 +653,20 @@ export default function CourseEditor() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => navigate("/admin")}
-              className="flex items-center space-x-2 text-gray-600 hover:text-textPrimary transition-colors"
+              className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft className="w-5 h-5" />
               <span>Retour au dashboard</span>
             </button>
             <div className="h-6 w-px bg-gray-300"></div>
-            <h1 className="text-3xl font-bold text-textPrimary">
+            <h1 className="text-3xl font-bold text-gray-900">
               {id ? "Modifier le cours" : "Nouveau cours"}
             </h1>
           </div>
@@ -677,7 +677,7 @@ export default function CourseEditor() {
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     course.status === "PUBLISHED"
-                      ? "bg-success/20 text-success"
+                      ? "bg-green-100 text-green-700"
                       : course.status === "DRAFT"
                       ? "bg-yellow-100 text-yellow-800"
                       : "bg-gray-100 text-gray-800"
@@ -689,7 +689,7 @@ export default function CourseEditor() {
                 {course.status === "DRAFT" && (
                   <button
                     onClick={handlePublishCourse}
-                    className="flex items-center space-x-2 bg-success text-white px-4 py-2 rounded-lg hover:bg-success/90 transition-colors"
+                    className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                   >
                     <Send className="w-4 h-4" />
                     <span>Publier</span>
@@ -698,7 +698,7 @@ export default function CourseEditor() {
 
                 <button
                   onClick={() => navigate(`/course/${course.id}`)}
-                  className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                  className="flex items-center space-x-2 bg-[#0096F0] text-white px-4 py-2 rounded-lg hover:bg-[#0080D6] transition-colors"
                 >
                   <Eye className="w-4 h-4" />
                   <span>Prévisualiser</span>
@@ -733,10 +733,10 @@ export default function CourseEditor() {
                 disabled={tab.disabled}
                 className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
                   activeTab === tab.id
-                    ? "bg-primary text-white shadow-md"
+                    ? "bg-[#0096F0] text-white shadow-md"
                     : tab.disabled
                     ? "text-gray-400 cursor-not-allowed"
-                    : "text-gray-600 hover:text-textPrimary hover:bg-gray-50"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
               >
                 <IconComponent className="w-4 h-4" />
@@ -777,7 +777,7 @@ export default function CourseEditor() {
               {/* Formulaire principal */}
               <div className="lg:col-span-2 space-y-6">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-lg font-semibold text-textPrimary mb-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-6">
                     Informations générales
                   </h3>
 
@@ -795,7 +795,7 @@ export default function CourseEditor() {
                             title: e.target.value,
                           }))
                         }
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                         placeholder="Ex: Introduction à React"
                       />
                     </div>
@@ -813,7 +813,7 @@ export default function CourseEditor() {
                           }))
                         }
                         rows={5}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                         placeholder="Décrivez votre cours en quelques mots..."
                       ></textarea>
                     </div>
@@ -831,7 +831,7 @@ export default function CourseEditor() {
                               categoryId: e.target.value,
                             }))
                           }
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary bg-white"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] bg-white"
                         >
                           <option value="" disabled>
                             Sélectionner une catégorie
@@ -855,7 +855,7 @@ export default function CourseEditor() {
                               level: e.target.value as CourseLevel,
                             }))
                           }
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary bg-white"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] bg-white"
                         >
                           <option value="DEBUTANT">Débutant</option>
                           <option value="INTERMEDIAIRE">Intermédiaire</option>
@@ -882,7 +882,7 @@ export default function CourseEditor() {
                               }));
                             }
                           }}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                           placeholder="Heures"
                         />
                         <span className="text-gray-500">:</span>
@@ -904,7 +904,7 @@ export default function CourseEditor() {
                               }));
                             }
                           }}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                           placeholder="Minutes"
                         />
                         {formatDuration(duration.hours, duration.minutes) && (
@@ -920,7 +920,7 @@ export default function CourseEditor() {
                     <button
                       onClick={handleSaveBasicInfo}
                       disabled={saving || isFormInvalid}
-                      className="flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+                      className="flex items-center space-x-2 bg-[#0096F0] text-white px-6 py-3 rounded-lg hover:bg-[#0080D6] transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
                       <Save className="w-4 h-4" />
                       <span>
@@ -938,7 +938,7 @@ export default function CourseEditor() {
               {/* Sidebar - Image de couverture */}
               <div className="space-y-6">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-lg font-semibold text-textPrimary mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
                     Image de couverture
                   </h3>
 
@@ -963,7 +963,7 @@ export default function CourseEditor() {
                       />
                       <label
                         htmlFor="course-image"
-                        className="flex items-center justify-center space-x-2 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary transition-colors cursor-pointer"
+                        className="flex items-center justify-center space-x-2 w-full py-3 border-2 border-dashed border-gray-300 rounded-lg hover:border-[#0096F0] transition-colors cursor-pointer"
                       >
                         <Upload className="w-5 h-5 text-gray-500" />
                         <span className="text-gray-600">Choisir une image</span>
@@ -974,7 +974,7 @@ export default function CourseEditor() {
                       <button
                         onClick={() => handleImageUpload(course.id!)}
                         disabled={imageUploading}
-                        className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary/90 transition-colors disabled:bg-gray-300"
+                        className="w-full bg-[#0096F0] text-white py-2 rounded-lg hover:bg-[#0080D6] transition-colors disabled:bg-gray-300"
                       >
                         {imageUploading
                           ? "Upload en cours..."
@@ -990,7 +990,7 @@ export default function CourseEditor() {
 
                 {course && (
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-semibold text-textPrimary mb-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
                       Statistiques
                     </h3>
                     <div className="space-y-3">
@@ -1032,7 +1032,7 @@ export default function CourseEditor() {
             <div className="space-y-6">
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h3 className="text-lg font-semibold text-textPrimary">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     Structure du cours
                   </h3>
                   <button
@@ -1040,7 +1040,7 @@ export default function CourseEditor() {
                       setChapterForm({ id: null, title: "" });
                       setShowChapterModal(true);
                     }}
-                    className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                    className="flex items-center space-x-2 bg-[#0096F0] text-white px-4 py-2 rounded-lg hover:bg-[#0080D6] transition-colors"
                   >
                     <Plus className="w-4 h-4" />
                     <span>Ajouter un chapitre</span>
@@ -1060,7 +1060,7 @@ export default function CourseEditor() {
                       </p>
                       <button
                         onClick={() => setShowChapterModal(true)}
-                        className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
+                        className="bg-[#0096F0] text-white px-6 py-3 rounded-lg hover:bg-[#0080D6] transition-colors"
                       >
                         Créer le premier chapitre
                       </button>
@@ -1080,14 +1080,14 @@ export default function CourseEditor() {
                                 Chapitre {chapterIndex + 1}
                               </span>
                             </div>
-                            <h4 className="font-semibold text-textPrimary">
+                            <h4 className="font-semibold text-gray-900">
                               {chapter.title}
                             </h4>
                           </div>
                           <div className="flex items-center space-x-2">
                             <button
                               onClick={() => handleEditChapter(chapter)}
-                              className="text-gray-400 hover:text-textPrimary transition-colors"
+                              className="text-gray-400 hover:text-gray-900 transition-colors"
                               title="Modifier le chapitre"
                             >
                               <Edit3 className="w-4 h-4" />
@@ -1114,7 +1114,7 @@ export default function CourseEditor() {
                                 });
                                 setShowLessonModal(true);
                               }}
-                              className="flex items-center space-x-1 bg-primary text-white px-3 py-1 rounded text-sm hover:bg-primary/90 transition-colors"
+                              className="flex items-center space-x-1 bg-[#0096F0] text-white px-3 py-1 rounded text-sm hover:bg-[#0080D6] transition-colors"
                             >
                               <Plus className="w-3 h-3" />
                               <span>Leçon</span>
@@ -1127,7 +1127,7 @@ export default function CourseEditor() {
                                     : chapter.id
                                 )
                               }
-                              className="text-gray-600 hover:text-textPrimary transition-colors"
+                              className="text-gray-600 hover:text-gray-900 transition-colors"
                             >
                               {expandedChapter === chapter.id ? "−" : "+"}
                             </button>
@@ -1274,7 +1274,7 @@ export default function CourseEditor() {
 
                                       <button
                                         onClick={() => handleEditLesson(lesson)}
-                                        className="text-gray-400 hover:text-textPrimary transition-colors"
+                                        className="text-gray-400 hover:text-gray-900 transition-colors"
                                       >
                                         <Edit3 className="w-4 h-4" />
                                       </button>
@@ -1300,7 +1300,7 @@ export default function CourseEditor() {
                                     setSelectedChapterId(chapter.id);
                                     setShowLessonModal(true);
                                   }}
-                                  className="text-primary hover:text-primary/80 text-sm font-medium"
+                                  className="text-[#0096F0] hover:text-[#0080D6] text-sm font-medium"
                                 >
                                   Ajouter la première leçon
                                 </button>
@@ -1320,20 +1320,20 @@ export default function CourseEditor() {
           {activeTab === "settings" && course && (
             <div className="space-y-6">
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                <h3 className="text-lg font-semibold text-textPrimary mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-6">
                   Paramètres du cours
                 </h3>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-medium text-textPrimary mb-3">
+                    <h4 className="font-medium text-gray-900 mb-3">
                       Statut de publication
                     </h4>
                     <div className="flex items-center space-x-4">
                       <span
                         className={`px-3 py-1 rounded-full text-sm font-medium ${
                           course.status === "PUBLISHED"
-                            ? "bg-success/20 text-success"
+                            ? "bg-green-100 text-green-700"
                             : "bg-yellow-100 text-yellow-800"
                         }`}
                       >
@@ -1342,7 +1342,7 @@ export default function CourseEditor() {
                       {course.status === "DRAFT" && (
                         <button
                           onClick={handlePublishCourse}
-                          className="bg-success text-white px-4 py-2 rounded-lg hover:bg-success/90 transition-colors"
+                          className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors"
                         >
                           Publier le cours
                         </button>
@@ -1377,7 +1377,7 @@ export default function CourseEditor() {
       {showChapterModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-textPrimary mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {chapterForm.id ? "Modifier le chapitre" : "Nouveau chapitre"}
             </h3>
 
@@ -1396,7 +1396,7 @@ export default function CourseEditor() {
                     }))
                   }
                   placeholder="Ex: Introduction au développement web"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                   autoFocus
                 />
               </div>
@@ -1408,14 +1408,14 @@ export default function CourseEditor() {
                   setShowChapterModal(false);
                   setChapterForm({ id: null, title: "" });
                 }}
-                className="px-4 py-2 text-gray-600 hover:text-textPrimary transition-colors"
+                className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Annuler
               </button>
               <button
                 onClick={handleAddOrUpdateChapter}
                 disabled={!chapterForm.title.trim()}
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors disabled:bg-gray-300"
+                className="bg-[#0096F0] text-white px-4 py-2 rounded-lg hover:bg-[#0080D6] transition-colors disabled:bg-gray-300"
               >
                 {chapterForm.id ? "Modifier" : "Ajouter"}
               </button>
@@ -1428,7 +1428,7 @@ export default function CourseEditor() {
       {showLessonModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
-            <h3 className="text-lg font-semibold text-textPrimary mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
               {lessonForm.id ? "Modifier la leçon" : "Nouvelle leçon"}
             </h3>
 
@@ -1447,7 +1447,7 @@ export default function CourseEditor() {
                     }))
                   }
                   placeholder="Ex: Les bases du HTML"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                   autoFocus
                 />
               </div>
@@ -1464,7 +1464,7 @@ export default function CourseEditor() {
                       contentType: e.target.value as ContentType,
                     }))
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                   disabled={!!lessonForm.id}
                 >
                   <option value="TEXT">📝 Texte</option>
@@ -1489,7 +1489,7 @@ export default function CourseEditor() {
                     }
                     placeholder="Rédigez le contenu de votre leçon..."
                     rows={5}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                   />
                 </div>
               )}
@@ -1507,7 +1507,7 @@ export default function CourseEditor() {
                         onClick={() => setLessonVideoType("url")}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-colors ${
                           lessonVideoType === "url"
-                            ? "border-primary bg-primary/10 text-primary"
+                            ? "border-[#0096F0] bg-[#0096F0]/10 text-[#0096F0]"
                             : "border-gray-200 text-gray-600 hover:border-gray-300"
                         }`}
                       >
@@ -1519,7 +1519,7 @@ export default function CourseEditor() {
                         onClick={() => setLessonVideoType("file")}
                         className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-colors ${
                           lessonVideoType === "file"
-                            ? "border-primary bg-primary/10 text-primary"
+                            ? "border-[#0096F0] bg-[#0096F0]/10 text-[#0096F0]"
                             : "border-gray-200 text-gray-600 hover:border-gray-300"
                         }`}
                       >
@@ -1545,7 +1545,7 @@ export default function CourseEditor() {
                           }))
                         }
                         placeholder="https://youtube.com/watch?v=... ou https://vimeo.com/..."
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                         required
                       />
                     </div>
@@ -1560,7 +1560,7 @@ export default function CourseEditor() {
                         onChange={(e) =>
                           setLessonVideoFile(e.target.files?.[0] || null)
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                         required
                       />
                       <p className="text-xs text-gray-500 mt-1">
@@ -1590,7 +1590,7 @@ export default function CourseEditor() {
                     onChange={(e) =>
                       setLessonDocumentFile(e.target.files?.[0] || null)
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                     required
                   />
                   <p className="text-xs text-gray-500 mt-1">
@@ -1624,7 +1624,7 @@ export default function CourseEditor() {
                   setLessonVideoType("url");
                   setSelectedChapterId("");
                 }}
-                className="px-4 py-2 text-gray-600 hover:text-textPrimary transition-colors"
+                className="px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
                 Annuler
               </button>
@@ -1645,7 +1645,7 @@ export default function CourseEditor() {
                     !lessonDocumentFile &&
                     !lessonForm.id)
                 }
-                className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors disabled:bg-gray-300"
+                className="bg-[#0096F0] text-white px-4 py-2 rounded-lg hover:bg-[#0080D6] transition-colors disabled:bg-gray-300"
               >
                 {creatingLesson
                   ? "Traitement..."
@@ -1658,12 +1658,12 @@ export default function CourseEditor() {
         </div>
       )}
 
-      {/* NOUVELLE Modal Gestion Vidéo */}
+      {/* Modal Gestion Vidéo */}
       {showVideoModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-textPrimary">
+              <h3 className="text-lg font-semibold text-gray-900">
                 Ajouter une vidéo
               </h3>
               <button
@@ -1678,14 +1678,13 @@ export default function CourseEditor() {
               </button>
             </div>
 
-            {/* Choix du type */}
             <div className="mb-4">
               <div className="flex space-x-4">
                 <button
                   onClick={() => setVideoUploadType("local")}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-colors ${
                     videoUploadType === "local"
-                      ? "border-primary bg-primary/10 text-primary"
+                      ? "border-[#0096F0] bg-[#0096F0]/10 text-[#0096F0]"
                       : "border-gray-200 text-gray-600 hover:border-gray-300"
                   }`}
                 >
@@ -1696,7 +1695,7 @@ export default function CourseEditor() {
                   onClick={() => setVideoUploadType("url")}
                   className={`flex items-center space-x-2 px-4 py-2 rounded-lg border-2 transition-colors ${
                     videoUploadType === "url"
-                      ? "border-primary bg-primary/10 text-primary"
+                      ? "border-[#0096F0] bg-[#0096F0]/10 text-[#0096F0]"
                       : "border-gray-200 text-gray-600 hover:border-gray-300"
                   }`}
                 >
@@ -1706,7 +1705,6 @@ export default function CourseEditor() {
               </div>
             </div>
 
-            {/* Contenu selon le type */}
             <div className="space-y-4">
               {videoUploadType === "local" ? (
                 <div>
@@ -1722,7 +1720,7 @@ export default function CourseEditor() {
                         handleVideoUpload(file);
                       }
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                   />
                   <p className="text-xs text-gray-500 mt-1">
                     Formats acceptés: MP4, MOV, AVI, MKV, WebM (max 100MB)
@@ -1738,13 +1736,13 @@ export default function CourseEditor() {
                     value={videoUrl}
                     onChange={(e) => setVideoUrl(e.target.value)}
                     placeholder="https://youtube.com/watch?v=... ou https://vimeo.com/..."
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                   />
                   <div className="flex justify-end mt-4">
                     <button
                       onClick={() => handleVideoUpload()}
                       disabled={uploading || !videoUrl.trim()}
-                      className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors disabled:bg-gray-300"
+                      className="bg-[#0096F0] text-white px-4 py-2 rounded-lg hover:bg-[#0080D6] transition-colors disabled:bg-gray-300"
                     >
                       {uploading ? "Traitement..." : "Définir l'URL"}
                     </button>
@@ -1755,7 +1753,7 @@ export default function CourseEditor() {
 
             {uploading && (
               <div className="mt-4 text-center">
-                <div className="inline-flex items-center space-x-2 text-primary">
+                <div className="inline-flex items-center space-x-2 text-[#0096F0]">
                   <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                   <span>Upload en cours...</span>
                 </div>
@@ -1765,12 +1763,12 @@ export default function CourseEditor() {
         </div>
       )}
 
-      {/* NOUVELLE Modal Upload Document */}
+      {/* Modal Upload Document */}
       {showDocumentModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl p-6 w-full max-w-lg mx-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-textPrimary">
+              <h3 className="text-lg font-semibold text-gray-900">
                 Ajouter un document
               </h3>
               <button
@@ -1798,7 +1796,7 @@ export default function CourseEditor() {
                       handleDocumentUpload(file);
                     }
                   }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0]"
                 />
                 <p className="text-xs text-gray-500 mt-1">
                   Formats acceptés: PDF, DOC, DOCX, PPT, PPTX, TXT (max 10MB)
@@ -1808,7 +1806,7 @@ export default function CourseEditor() {
 
             {uploading && (
               <div className="mt-4 text-center">
-                <div className="inline-flex items-center space-x-2 text-primary">
+                <div className="inline-flex items-center space-x-2 text-[#0096F0]">
                   <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                   <span>Upload en cours...</span>
                 </div>
@@ -1818,13 +1816,12 @@ export default function CourseEditor() {
         </div>
       )}
 
-      {/* NOUVEAU : Modal Visualiseur PDF */}
+      {/* Modal Visualiseur PDF */}
       {showPdfViewer && selectedPdfUrl && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl w-full max-w-6xl h-5/6 mx-4 flex flex-col">
-            {/* Header du visualiseur */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-textPrimary flex items-center space-x-2">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
                 <File className="w-5 h-5" />
                 <span>Aperçu du document</span>
               </h3>
@@ -1833,7 +1830,7 @@ export default function CourseEditor() {
                   href={selectedPdfUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-2 bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                  className="flex items-center space-x-2 bg-[#0096F0] text-white px-3 py-2 rounded-lg hover:bg-[#0080D6] transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span>Ouvrir</span>
@@ -1849,8 +1846,6 @@ export default function CourseEditor() {
                 </button>
               </div>
             </div>
-
-            {/* Contenu du visualiseur */}
             <div className="flex-1 p-4">
               <iframe
                 src={`${selectedPdfUrl}#toolbar=1&navpanes=1&scrollbar=1`}
@@ -1862,13 +1857,12 @@ export default function CourseEditor() {
         </div>
       )}
 
-      {/* NOUVEAU : Modal Visualiseur Vidéo */}
+      {/* Modal Visualiseur Vidéo */}
       {showVideoViewer && selectedVideoUrl && (
         <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white rounded-xl w-full max-w-full h-5/6 mx-4 flex flex-col">
-            {/* Header du visualiseur */}
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
-              <h3 className="text-lg font-semibold text-textPrimary flex items-center space-x-2">
+              <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
                 <Video className="w-5 h-5" />
                 <span>Aperçu de la vidéo</span>
               </h3>
@@ -1877,7 +1871,7 @@ export default function CourseEditor() {
                   href={selectedVideoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center space-x-2 bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+                  className="flex items-center space-x-2 bg-[#0096F0] text-white px-3 py-2 rounded-lg hover:bg-[#0080D6] transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                   <span>Ouvrir</span>
@@ -1893,8 +1887,6 @@ export default function CourseEditor() {
                 </button>
               </div>
             </div>
-
-            {/* Contenu du visualiseur */}
             <div className="flex-1 p-4 flex items-center justify-center overflow-hidden">
               <video
                 src={selectedVideoUrl}
