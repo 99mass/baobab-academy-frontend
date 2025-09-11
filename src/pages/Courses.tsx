@@ -35,7 +35,7 @@ export default function Courses() {
   const [selectedDuration, setSelectedDuration] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
 
-  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
   useEffect(() => {
     const fetchCoursesAndCategories = async () => {
@@ -605,7 +605,7 @@ export default function Courses() {
                   {filteredCourses.length > 1 ? t('coursesFound') : t('courseFound')}
                 </p>
 
-                <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
+                <div className="hidden sm:flex items-center bg-white rounded-lg border border-gray-200 p-1">
                   <button
                     onClick={() => setViewMode("list")}
                     className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-all ${

@@ -322,7 +322,7 @@ export default function Header({
               onClick={() => setIsMenuOpen(false)}
             >
               <BookOpen className="w-5 h-5" />
-              <span>Cours</span>
+              <span>{t("catalogCourses")}</span>
             </Link>
 
             {/* Language Switcher Mobile */}
