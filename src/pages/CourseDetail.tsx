@@ -16,6 +16,8 @@ import {
 } from "lucide-react";
 import { courseService } from "../services/courseService";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "../utils/translations";
 import type { Course } from "../types/course";
 import CourseRatingComponent from "../components/courseRatingComponent";
 
@@ -58,6 +60,8 @@ const API_BASE_URL =
 export default function CourseDetail() {
   const { id } = useParams<{ id: string }>();
   const { isAuthenticated, user } = useAuth();
+  const { lang } = useLanguage();
+  const { t } = useTranslation(lang);
   const [courseData, setCourseData] = useState<CourseWithProgress | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -286,7 +290,7 @@ export default function CourseDetail() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-4 border-[#0096F0] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement du cours...</p>
+          <p className="text-gray-600">{t('loadingCourse')}</p>
         </div>
       </div>
     );

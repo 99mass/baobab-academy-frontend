@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import type { ReactNode } from "react";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -163,7 +164,9 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppContent />
+        <LanguageProvider>
+          <AppContent />
+        </LanguageProvider>
       </AuthProvider>
     </Router>
   );

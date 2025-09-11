@@ -15,6 +15,8 @@ import {
 import { useAuth } from "../hooks/useAuth";
 import type { User as UserType } from "../types";
 import { courseService } from "../services/courseService";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "../utils/translations";
 
 interface HeaderProps {
   isAuthenticated?: boolean;
@@ -28,7 +30,6 @@ export default function Header({
   user,
 }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [lang, setLang] = useState("fr");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [categories, setCategories] = useState<any[]>([]);
@@ -38,6 +39,8 @@ export default function Header({
   const navigate = useNavigate();
 
   const { logout } = useAuth();
+  const { lang, setLang } = useLanguage();
+  const { t } = useTranslation(lang);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -109,7 +112,7 @@ export default function Header({
               </span>
             </div> */}
              <div className="hidden sm:block  bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium  animate-bounce-in">
-                 Plateforme d'apprentissage
+                 {t('platformDescription')}
               </div>
           </Link>
 
@@ -171,7 +174,7 @@ export default function Header({
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="text"
-                      placeholder="Rechercher une catégorie..."
+                      placeholder={t('searchPlaceholder')}
                       className="w-full pl-10 pr-4 py-2.5 border-2 border-blue-500 rounded-full focus:outline-none text-sm"
                       value={searchQuery}
                       onChange={handleSearchChange}
@@ -214,7 +217,7 @@ export default function Header({
               }`}
             >
               <Home className="w-4 h-4" />
-              <span>Accueil</span>
+              <span>{t('home')}</span>
             </Link>
 
             <Link
@@ -226,7 +229,7 @@ export default function Header({
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              <span>Catalogue de Cours</span>
+              <span>{t('catalogCourses')}</span>
             </Link>
 
             {isAuthenticated ? (
@@ -261,7 +264,7 @@ export default function Header({
                       className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
                     >
                       <UserIcon className="w-4 h-4 text-blue-600" />
-                      <span>Mon Profil</span>
+                      <span>{t('profile')}</span>
                     </Link>
                     <hr className="my-2 border-gray-100" />
                     <button
@@ -279,7 +282,7 @@ export default function Header({
                 to="/auth"
                 className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium shadow-sm hover:shadow-md ml-4"
               >
-                Connexion
+                {t('login')}
               </Link>
             )}
           </nav>
@@ -312,7 +315,7 @@ export default function Header({
               onClick={() => setIsMenuOpen(false)}
             >
               <Home className="w-5 h-5" />
-              <span>Accueil</span>
+              <span>{t('home')}</span>
             </Link>
 
             <Link
@@ -392,7 +395,7 @@ export default function Header({
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <UserIcon className="w-5 h-5" />
-                  <span>Mon Profil</span>
+                  <span>{t('profile')}</span>
                 </Link>
 
                 <Link
@@ -421,7 +424,7 @@ export default function Header({
                   className="block px-4 py-3 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700 transition-colors shadow-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Connexion
+                  {t('login')}
                 </Link>
               </div>
             )}

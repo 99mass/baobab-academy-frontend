@@ -19,8 +19,12 @@ import {
 } from "lucide-react";
 import { courseService } from "../services/courseService";
 import type { Course, Category } from "../types/course";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "../utils/translations";
 
 export default function Courses() {
+  const { lang } = useLanguage();
+  const { t } = useTranslation(lang);
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -182,7 +186,7 @@ export default function Courses() {
         <div className="p-6">
           <div className="mb-3">
             <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-[#0096F0]/10 text-[#0096F0]">
-              {course.categoryName ?? "Sans catégorie"}
+              {course.categoryName ?? t('noCategory')}
             </span>
           </div>
 
@@ -302,7 +306,7 @@ export default function Courses() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-sm text-[#0096F0] font-medium bg-[#0096F0]/10 px-3 py-1 rounded-full">
-                  {course.categoryName || "Sans catégorie"}
+                  {course.categoryName || "{t('noCategory')}"}
                 </span>
                 {course.students > 100 && (
                   <span className="text-xs text-[#DFB216] font-medium bg-amber-50 px-2 py-1 rounded-full flex items-center gap-1">
@@ -380,11 +384,10 @@ export default function Courses() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-[#CD010A] mb-6">
-              Explorez Nos <span className="text-[#CD010A]">Formations</span>
+              {t('exploreOurTraining')} <span className="text-[#CD010A]">{t('training')}</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Découvrez des cours conçus par des experts pour faire grandir vos
-              compétences et accélérer votre carrière.
+              {t('coursePageDescription')}
             </p>
 
             <div className="max-w-2xl mx-auto relative mb-8">

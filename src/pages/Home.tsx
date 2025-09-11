@@ -13,11 +13,15 @@ import {
 } from "lucide-react";
 import { courseService } from "../services/courseService";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "../utils/translations";
 import type { Course } from "../types/course";
 import "../css/animation.css";
 
 export default function Home() {
   const { isAuthenticated } = useAuth();
+  const { lang } = useLanguage();
+  const { t } = useTranslation(lang);
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -67,25 +71,23 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center py-16 lg:py-24">
             <div className="order-2 lg:order-1 animate-fade-in-up">
               <div className="inline-flex items-center bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-in">
                 <span className="w-2 h-2 bg-blue-600 rounded-full mr-2 animate-pulse"></span>
-                Bienvenue sur la plateforme de formation en ligne FIBEM
+                {t('welcome')}
               </div>
 
               <h1 className=" text-xl lg:text-5xl font-bold text-[#CD010A] leading-tight animate-slide-in-left mb-6">
-               Atteignez l'excellence avec
+               {t('heroTitle')}
                 <span className="text-transparent pl-3 bg-gradient-to-r from-[#0096F0] to-[#CD010A] bg-clip-text  animate-text-gradient">
                   FIBEM
                 </span>
               </h1>
 
               <p className="text-md text-gray-600 mb-8 leading-relaxed animate-fade-in opacity-0 animation-delay-200">
-                Développez vos compétences professionnelles grâce à nos
-                formations en ligne, conçues par des experts et adaptées à vos
-                besoins.
+                {t('heroDescription')}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-8 animate-fade-in opacity-0 animation-delay-400">
@@ -93,7 +95,7 @@ export default function Home() {
                   to="/courses"
                   className="bg-[#0096F0] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center justify-center space-x-2 group"
                 >
-                  <span>Explorer nos cours</span>
+                  <span>{t('exploreCourses')}</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
 
@@ -102,7 +104,7 @@ export default function Home() {
                     to="/auth"
                     className="border-2 border-[#0096F0] text-[#0096F0] px-8 py-4 rounded-lg font-semibold hover:bg-[#0096F0] hover:text-white transition-all duration-300 hover:scale-105 text-center"
                   >
-                    Créer un compte gratuit
+                    {t('createAccount')}
                   </Link>
                 )}
               </div>
@@ -110,15 +112,15 @@ export default function Home() {
               <div className="flex items-center space-x-6 text-sm text-gray-600 animate-fade-in opacity-0 animation-delay-600">
                 <div className="flex items-center space-x-2 hover:text-[#0096F0] transition-colors cursor-pointer group">
                   <Users className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  <span>5000+ étudiants</span>
+                  <span>5000+ {t('students')}</span>
                 </div>
                 <div className="flex items-center space-x-2 hover:text-[#0096F0] transition-colors cursor-pointer group">
                   <Star className="w-4 h-4 text-[#DFB216] fill-current group-hover:scale-110 transition-transform" />
-                  <span>4.8/5 moyenne</span>
+                  <span>4.8/5 {t('average')}</span>
                 </div>
                 <div className="flex items-center space-x-2 hover:text-[#0096F0] transition-colors cursor-pointer group">
                   <BookOpen className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                  <span>100+ cours</span>
+                  <span>100+ {t('courses')}</span>
                 </div>
               </div>
             </div>
@@ -127,7 +129,7 @@ export default function Home() {
               <div className="relative">
                 <img
                   src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80"
-                  alt="Étudiants apprenant ensemble"
+                  alt={lang === 'fr' ? "Étudiants apprenant ensemble" : "Students learning together"}
                   className="rounded-2xl shadow-2xl hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute -bottom-6 -left-6 bg-white p-4 rounded-xl shadow-lg animate-float">
@@ -136,8 +138,8 @@ export default function Home() {
                       <Award className="w-5 h-5 text-green-600 animate-bounce-slow" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm text-blue-500">95% de réussite</p>
-                      <p className="text-xs text-gray-500">Taux de réussite</p>
+                      <p className="font-semibold text-sm text-blue-500">95% {t('successRate')}</p>
+                      <p className="text-xs text-gray-500">{t('successRateLabel')}</p>
                     </div>
                   </div>
                 </div>
@@ -151,7 +153,7 @@ export default function Home() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
           <h2 className="text-2xl font-bold text-[#CD010A] mb-8">
-            Que souhaitez-vous apprendre aujourd'hui ?
+            {t('whatLearnToday')}
           </h2>
 
           <div className="flex flex-wrap justify-center gap-3 mt-6">
@@ -185,11 +187,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-3xl font-bold text-[#CD010A] mb-4">
-              Cours les plus populaires
+              {t('popularCourses')}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Rejoignez des milliers d'étudiants qui font confiance à nos
-              formations certifiantes.
+              {t('popularCoursesDescription')}
             </p>
           </div>
 
@@ -246,7 +247,7 @@ export default function Home() {
                         </div>
                         <div className="flex items-center space-x-1">
                           <User className="w-4 h-4" />
-                          <span>{course.students.toLocaleString()} élèves</span>
+                          <span>{course.students.toLocaleString()} {t('students')}</span>
                         </div>
                       </div>
                     </div>
@@ -261,7 +262,7 @@ export default function Home() {
               to="/courses"
               className="inline-flex items-center space-x-2 bg-[#0096F0] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 hover:shadow-lg group"
             >
-              <span>Voir tous les cours</span>
+              <span>{t('seeAllCourses')}</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
@@ -273,11 +274,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in-up">
             <h2 className="text-3xl font-bold text-[#CD010A] mb-4">
-              Ils ont réussi avec FIBEM
+              {t('successStories')}
             </h2>
             <p className="text-xl text-gray-600">
-              Découvrez les témoignages de nos diplômés qui ont transformé leur
-              carrière.
+              {t('successStoriesDescription')}
             </p>
           </div>
 
@@ -291,13 +291,11 @@ export default function Home() {
                 />
                 <div>
                   <p className="font-semibold text-gray-900">Aminata Diop</p>
-                  <p className="text-sm text-gray-600">Développeuse Web</p>
+                  <p className="text-sm text-gray-600">{t('webDeveloper')}</p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                "Grâce à FIBEM, j'ai pu me reconvertir dans le développement
-                web. Les cours sont bien structurés et les mentors très
-                disponibles."
+                "{t('testimonial1')}"
               </p>
               <div className="flex items-center mt-4">
                 {[...Array(5)].map((_, i) => (
@@ -318,13 +316,11 @@ export default function Home() {
                 />
                 <div>
                   <p className="font-semibold text-gray-900">Mamadou Sall</p>
-                  <p className="text-sm text-gray-600">UX Designer</p>
+                  <p className="text-sm text-gray-600">{t('uxDesigner')}</p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                "Une expérience formidable ! J'ai acquis toutes les compétences
-                nécessaires pour devenir UX Designer et j'ai trouvé un emploi 2
-                mois après ma certification."
+                "{t('testimonial2')}"
               </p>
               <div className="flex items-center mt-4">
                 {[...Array(5)].map((_, i) => (
@@ -345,13 +341,11 @@ export default function Home() {
                 />
                 <div>
                   <p className="font-semibold text-gray-900">Fatou Ndiaye</p>
-                  <p className="text-sm text-gray-600">Data Analyst</p>
+                  <p className="text-sm text-gray-600">{t('dataAnalyst')}</p>
                 </div>
               </div>
               <p className="text-gray-700 italic">
-                "Les projets pratiques m'ont permis de constituer un portfolio
-                solide. Aujourd'hui, je travaille comme Data Analyst dans une
-                entreprise internationale."
+                "{t('testimonial3')}"
               </p>
               <div className="flex items-center mt-4">
                 {[...Array(5)].map((_, i) => (
@@ -370,11 +364,10 @@ export default function Home() {
       <section className="py-20 text-[#CD010A] bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
           <h2 className="text-xl lg:text-4xl font-bold mb-6 text-[#CD010A]">
-            Commencez votre transformation professionnelle dès aujourd'hui
+            {t('finalCta')}
           </h2>
           <p className="text-md mb-8 text-gray-700">
-            Rejoignez notre communauté d'apprenants et développez les
-            compétences qui feront la différence dans votre carrière.
+            {t('finalCtaDescription')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {!isAuthenticated ? (
@@ -382,7 +375,7 @@ export default function Home() {
                 to="/auth"
                 className="bg-[#DFB216] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#C9A015] transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
               >
-                <span>Créer mon compte gratuit</span>
+                <span>{t('createFreeAccount')}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             ) : (
@@ -390,7 +383,7 @@ export default function Home() {
                 to="/profile"
                 className="bg-[#DFB216] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[#C9A015] transition-all duration-300 hover:scale-105 hover:shadow-lg inline-flex items-center justify-center space-x-2 group"
               >
-                <span>Accéder à mon tableau de bord</span>
+                <span>{t('accessDashboard')}</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             )}
@@ -398,7 +391,7 @@ export default function Home() {
               to="/courses"
               className="border border-[#0096F0] text-[#0096F0] px-8 py-4 rounded-lg font-semibold hover:bg-[#0096F0] hover:text-white transition-all duration-300 hover:scale-105 text-center"
             >
-              Découvrir nos formations
+              {t('discoverTraining')}
             </Link>
           </div>
         </div>
