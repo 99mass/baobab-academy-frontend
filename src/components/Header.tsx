@@ -112,7 +112,7 @@ export default function Header({
           </Link>
 
           {/* Language Switcher and Search */}
-          <div className="flex items-center justify-end flex-1 mx-4">
+          <div className="flex items-center justify-end flex-1 mx-4 mr-0">
             {/* Recherche par catégorie */}
             <div ref={searchRef} className="relative">
               <div
