@@ -183,8 +183,8 @@ export default function Auth() {
                 alt="FIBEM Logo"
                 className="w-24 h-16"
               />
-              <span className="text-2xl font-bold text-[#0096F0] pl-2">
-                FIBEM
+              <span className="text-xl font-bold text-[#CD010A] pl-2">
+                 Plateforme d'apprentissage
               </span>
             </Link>
           </div>

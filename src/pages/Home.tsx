@@ -70,14 +70,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center py-16 lg:py-24">
             <div className="order-2 lg:order-1 animate-fade-in-up">
-              <div className="inline-flex items-center bg-green-50 text-green-600 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-in">
-                <span className="w-2 h-2 bg-green-600 rounded-full mr-2 animate-pulse"></span>
-                Bienvenue sur FIBEM
+              <div className="inline-flex items-center bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-bounce-in">
+                <span className="w-2 h-2 bg-blue-600 rounded-full mr-2 animate-pulse"></span>
+                Bienvenue sur la plateforme de formation en ligne FIBEM
               </div>
 
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight animate-slide-in-left">
-                Cultivez votre savoir avec
-                <span className="text-transparent bg-gradient-to-r from-[#0096F0] to-[#CD010A] bg-clip-text block animate-text-gradient">
+              <h1 className=" text-xl lg:text-5xl font-bold text-[#CD010A] leading-tight animate-slide-in-left mb-6">
+               Atteignez l'excellence avec
+                <span className="text-transparent pl-3 bg-gradient-to-r from-[#0096F0] to-[#CD010A] bg-clip-text  animate-text-gradient">
                   FIBEM
                 </span>
               </h1>
@@ -136,7 +136,7 @@ export default function Home() {
                       <Award className="w-5 h-5 text-green-600 animate-bounce-slow" />
                     </div>
                     <div>
-                      <p className="font-semibold text-sm">95% de réussite</p>
+                      <p className="font-semibold text-sm text-blue-500">95% de réussite</p>
                       <p className="text-xs text-gray-500">Taux de réussite</p>
                     </div>
                   </div>
@@ -150,7 +150,7 @@ export default function Home() {
       {/* Section de recherche */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">
+          <h2 className="text-2xl font-bold text-[#CD010A] mb-8">
             Que souhaitez-vous apprendre aujourd'hui ?
           </h2>
 
@@ -184,7 +184,7 @@ export default function Home() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12 animate-fade-in-up">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-[#CD010A] mb-4">
               Cours les plus populaires
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -272,7 +272,7 @@ export default function Home() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16 animate-fade-in-up">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-[#CD010A] mb-4">
               Ils ont réussi avec FIBEM
             </h2>
             <p className="text-xl text-gray-600">
@@ -367,9 +367,9 @@ export default function Home() {
       </section>
 
       {/* CTA Final */}
-      <section className="py-20 text-[#0096F0] bg-gray-50">
+      <section className="py-20 text-[#CD010A] bg-gray-50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-fade-in-up">
-          <h2 className="text-xl lg:text-4xl font-bold mb-6">
+          <h2 className="text-xl lg:text-4xl font-bold mb-6 text-[#CD010A]">
             Commencez votre transformation professionnelle dès aujourd'hui
           </h2>
           <p className="text-md mb-8 text-gray-700">

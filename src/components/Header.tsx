@@ -1,5 +1,6 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -8,9 +9,12 @@ import {
   Home,
   ChevronDown,
   LogOut,
+  Search,
+  Globe,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import type { User as UserType } from "../types";
+import { courseService } from "../services/courseService";
 
 interface HeaderProps {
   isAuthenticated?: boolean;
@@ -23,8 +27,15 @@ export default function Header({
   userRole = "student",
   user,
 }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [lang, setLang] = useState("fr");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categories, setCategories] = useState<any[]>([]);
+  const [suggestedCategories, setSuggestedCategories] = useState<any[]>([]);
+  const searchRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const { logout } = useAuth();
 
@@ -36,14 +47,161 @@ export default function Header({
     setIsMenuOpen(false);
   };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const categoryResponse = await courseService.getCategories();
+        if (categoryResponse.success && categoryResponse.data) {
+          setCategories(categoryResponse.data);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des catégories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        searchRef.current &&
+        !(searchRef.current as any).contains(event.target)
+      ) {
+        setIsSearchOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [searchRef]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query.length > 0) {
+      const filtered = categories.filter((category) =>
+        category.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setSuggestedCategories(filtered);
+    } else {
+      setSuggestedCategories([]);
+    }
+  };
+
+  const handleSuggestionClick = (categoryId: string) => {
+    setIsSearchOpen(false);
+    setSearchQuery("");
+    setSuggestedCategories([]);
+    navigate(`/courses?category=${categoryId}`);
+  };
+
   return (
-    <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-0 group">
+    <header className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50 ">
+      <div className="max-w-full  mx-6 sm:px-2">
+        <div className="flex justify-between items-center h-24">
+          {/* Logo avec description */}
+          <Link to="/" className="flex items-center space-x-3 group">
             <img src="/logo_fibem.png" alt="FIBEM Logo" className="w-26 h-12" />
+            {/* <div className="hidden sm:block">
+              <span className="text-md font-bold text-[#CD010A]">
+                Plateforme d'apprentissage
+              </span>
+            </div> */}
+             <div className="hidden sm:block  bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium  animate-bounce-in">
+                 Plateforme d'apprentissage
+              </div>
           </Link>
+
+          {/* Language Switcher and Search */}
+          <div className="flex items-center justify-end flex-1 mx-4">
+            {/* Language Switcher */}
+            <div className="relative group mr-0">
+              <button className="flex items-center space-x-2 px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200 font-medium">
+                <img
+                  src={
+                    lang === "fr"
+                      ? "https://flagcdn.com/fr.svg"
+                      : "https://flagcdn.com/gb.svg"
+                  }
+                  alt="Language"
+                  className="w-5 h-auto rounded-sm"
+                />
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <button
+                  onClick={() => {
+                    setLang("fr");
+                  }}
+                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
+                >
+                  <img
+                    src="https://flagcdn.com/fr.svg"
+                    alt="Français"
+                    className="w-5 h-auto rounded-sm"
+                  />
+                  <span>Français</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setLang("en");
+                  }}
+                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
+                >
+                  <img
+                    src="https://flagcdn.com/gb.svg"
+                    alt="English"
+                    className="w-5 h-auto rounded-sm"
+                  />
+                  <span>English</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Recherche par catégorie */}
+            <div ref={searchRef} className="relative">
+              <div
+                className={`transition-all duration-300 ${
+                  isSearchOpen ? "w-64" : "w-12"
+                }`}
+              >
+                {isSearchOpen ? (
+                  <div className="relative w-full">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <input
+                      type="text"
+                      placeholder="Rechercher une catégorie..."
+                      className="w-full pl-10 pr-4 py-2.5 border-2 border-blue-500 rounded-full focus:outline-none text-sm"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      autoFocus
+                    />
+                    {suggestedCategories.length > 0 && (
+                      <div className="absolute top-full mt-2 w-full bg-white rounded-lg shadow-lg border border-gray-100 py-2 z-50">
+                        {suggestedCategories.map((category) => (
+                          <button
+                            key={category.id}
+                            onClick={() => handleSuggestionClick(category.id)}
+                            className="w-full text-left block px-4 py-3 text-gray-700 hover:bg-gray-50"
+                          >
+                            {category.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setIsSearchOpen(true)}
+                    className="p-3 rounded-full text-gray-600 hover:bg-gray-100 hover:text-blue-600 transition-colors"
+                  >
+                    <Search className="w-6 h-6" />
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-2">
@@ -68,7 +226,7 @@ export default function Header({
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              <span>Cours</span>
+              <span>Catalogue de Cours</span>
             </Link>
 
             {isAuthenticated ? (
@@ -169,6 +327,48 @@ export default function Header({
               <BookOpen className="w-5 h-5" />
               <span>Cours</span>
             </Link>
+
+            {/* Language Switcher Mobile */}
+            <div className="relative group pt-2">
+              <div className="flex items-center justify-between px-4 py-3">
+                <div className="flex items-center space-x-3">
+                  <Globe className="w-5 h-5 text-gray-600" />
+                  <span className="font-medium text-gray-600">Langue</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => {
+                      setLang("fr");
+                      setIsMenuOpen(false);
+                    }}
+                    className={`p-1 rounded-full ${
+                      lang === "fr" ? "ring-2 ring-blue-500" : ""
+                    }`}
+                  >
+                    <img
+                      src="https://flagcdn.com/fr.svg"
+                      alt="Français"
+                      className="w-8 h-auto rounded-full"
+                    />
+                  </button>
+                  <button
+                    onClick={() => {
+                      setLang("en");
+                      setIsMenuOpen(false);
+                    }}
+                    className={`p-1 rounded-full ${
+                      lang === "en" ? "ring-2 ring-blue-500" : ""
+                    }`}
+                  >
+                    <img
+                      src="https://flagcdn.com/gb.svg"
+                      alt="English"
+                      className="w-8 h-auto rounded-full"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
 
             {isAuthenticated ? (
               <>
