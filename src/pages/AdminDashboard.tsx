@@ -30,6 +30,8 @@ import {
 } from "../services/adminService";
 import type { Course, PageResponse } from "../types/course";
 import type { UserResponse } from "../types/auth";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "../utils/translations";
 
 interface DashboardStats {
   totalCourses: number;
@@ -41,6 +43,9 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
+  const { lang } = useLanguage();
+  const { t } = useTranslation(lang);
+  
   const [activeTab, setActiveTab] = useState("dashboard");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -145,24 +150,24 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteCourse = async (courseId: string) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer ce cours ?")) {
+    if (!confirm(t('confirmDeleteCourse'))) {
       return;
     }
 
     try {
       await courseService.deleteCourse(courseId);
       loadCourses();
-      alert("Cours supprimé avec succès !");
+      alert(t('courseDeletedSuccessfully'));
     } catch (error: any) {
       console.error("Erreur lors de la suppression:", error);
-      alert(error.response?.data?.message || "Erreur lors de la suppression");
+      alert(error.response?.data?.message || t('deletionError'));
     }
   };
 
   const handleDeleteUser = async (userId: string, userEmail: string) => {
     if (
       !confirm(
-        `Êtes-vous sûr de vouloir supprimer l'utilisateur ${userEmail} ?`
+        `${t('confirmDeleteUser')} ${userEmail} ?`
       )
     ) {
       return;
@@ -171,16 +176,16 @@ export default function AdminDashboard() {
     try {
       await adminService.deleteUser(userId);
       loadUsers();
-      alert("Utilisateur supprimé avec succès !");
+      alert(t('userDeletedSuccessfully'));
     } catch (error: any) {
       console.error("Erreur lors de la suppression:", error);
-      alert(error.response?.data?.message || "Erreur lors de la suppression");
+      alert(error.response?.data?.message || t('deletionError'));
     }
   };
 
   const handleChangeUserRole = async (userId: string, newRole: string) => {
     if (
-      !confirm(`Êtes-vous sûr de vouloir changer le rôle vers ${newRole} ?`)
+      !confirm(`${t('confirmChangeRole')} ${newRole} ?`)
     ) {
       return;
     }
@@ -188,11 +193,11 @@ export default function AdminDashboard() {
     try {
       await adminService.changeUserRole(userId, newRole);
       loadUsers();
-      alert("Rôle modifié avec succès !");
+      alert(t('roleChangedSuccessfully'));
     } catch (error: any) {
       console.error("Erreur lors du changement de rôle:", error);
       alert(
-        error.response?.data?.message || "Erreur lors du changement de rôle"
+        error.response?.data?.message || t('roleChangeError')
       );
     }
   };
@@ -238,13 +243,13 @@ export default function AdminDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                Tableau de bord
+                {t('adminDashboard')}
               </h1>
               <p className="text-gray-600 flex items-center space-x-2">
                 <Calendar className="w-4 h-4" />
                 <span>
-                  Aujourd'hui,{" "}
-                  {new Date().toLocaleDateString("fr-FR", {
+                  {t('today')},{" "}
+                  {new Date().toLocaleDateString(lang === 'fr' ? "fr-FR" : "en-US", {
                     weekday: "long",
                     year: "numeric",
                     month: "long",
@@ -256,14 +261,14 @@ export default function AdminDashboard() {
             <div className="flex items-center space-x-3">
               <div className="bg-white px-4 py-2 rounded-lg border border-gray-200 text-sm text-gray-600">
                 <span className="w-2 h-2 bg-green-500 rounded-full inline-block mr-2"></span>
-                Plateforme active
+                {t('platformActive')}
               </div>
               <Link
                 to="/admin/course/new"
                 className="flex items-center space-x-2 bg-[#0096F0] text-white px-6 py-3 rounded-xl hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 font-semibold shadow-md"
               >
                 <Plus className="w-5 h-5" />
-                <span>Nouveau cours</span>
+                <span>{t('addNewCourse')}</span>
               </Link>
             </div>
           </div>
@@ -271,9 +276,9 @@ export default function AdminDashboard() {
 
         <div className="flex space-x-2 mb-8 bg-white rounded-xl p-2 shadow-sm border border-gray-200 w-fit">
           {[
-            { id: "dashboard", label: "Vue d'ensemble", icon: BarChart3 },
-            { id: "courses", label: "Cours", icon: BookOpen },
-            { id: "users", label: "Étudiants", icon: Users },
+            { id: "dashboard", label: t('overview'), icon: BarChart3 },
+            { id: "courses", label: t('courses'), icon: BookOpen },
+            { id: "users", label: t('studentsTab'), icon: Users },
           ].map((tab) => {
             const IconComponent = tab.icon;
             return (
@@ -305,14 +310,14 @@ export default function AdminDashboard() {
                     <p className="text-2xl font-bold text-gray-900">
                       {courses.length}
                     </p>
-                    <p className="text-sm text-gray-600">Cours créés</p>
+                    <p className="text-sm text-gray-600">{t('coursesCreated')}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1 text-sm">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-green-500 font-semibold">+2</span>
-                    <span className="text-gray-600">ce mois</span>
+                    <span className="text-gray-600">{t('thisMonth')}</span>
                   </div>
                 </div>
               </div>
@@ -326,14 +331,14 @@ export default function AdminDashboard() {
                     <p className="text-2xl font-bold text-gray-900">
                       {platformStats?.totalStudents || stats.totalStudents}
                     </p>
-                    <p className="text-sm text-gray-600">Étudiants inscrits</p>
+                    <p className="text-sm text-gray-600">{t('totalEnrolledStudents')}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1 text-sm">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-green-500 font-semibold">+156</span>
-                    <span className="text-gray-600">ce mois</span>
+                    <span className="text-gray-600">{t('thisMonth')}</span>
                   </div>
                 </div>
               </div>
@@ -347,14 +352,14 @@ export default function AdminDashboard() {
                     <p className="text-2xl font-bold text-gray-900">
                       {stats.totalCompletions.toLocaleString()}
                     </p>
-                    <p className="text-sm text-gray-600">Cours complétés</p>
+                    <p className="text-sm text-gray-600">{t('completedCourses')}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1 text-sm">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-green-500 font-semibold">+89</span>
-                    <span className="text-gray-600">ce mois</span>
+                    <span className="text-gray-600">{t('thisMonth')}</span>
                   </div>
                 </div>
               </div>
@@ -368,14 +373,14 @@ export default function AdminDashboard() {
                     <p className="text-2xl font-bold text-gray-900">
                       {stats.averageRating}/5
                     </p>
-                    <p className="text-sm text-gray-600">Note moyenne</p>
+                    <p className="text-sm text-gray-600">{t('overallRating')}</p>
                   </div>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-1 text-sm">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-green-500 font-semibold">+0.2</span>
-                    <span className="text-gray-600">ce mois</span>
+                    <span className="text-gray-600">{t('thisMonth')}</span>
                   </div>
                 </div>
               </div>
@@ -387,10 +392,10 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
                       <Activity className="w-5 h-5" />
-                      <span>Activité récente</span>
+                      <span>{t('recentActivity')}</span>
                     </h3>
                     <button className="text-sm text-[#0096F0] hover:text-[#0080D6] font-medium">
-                      Voir tout
+                      {t('seeAll')}
                     </button>
                   </div>
                 </div>
@@ -448,24 +453,24 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <h4 className="font-semibold text-gray-900 mb-4">
-                    Performance mensuelle
+                    {t('monthlyPerformance')}
                   </h4>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">
-                        Nouveaux étudiants
+                        {t('newStudents')}
                       </span>
                       <span className="font-semibold text-gray-900">+156</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">
-                        Taux de completion
+                        {t('completionRate')}
                       </span>
                       <span className="font-semibold text-green-600">78%</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-gray-600">
-                        Satisfaction
+                        {t('satisfaction')}
                       </span>
                       <span className="font-semibold text-yellow-600">
                         4.8★
@@ -476,7 +481,7 @@ export default function AdminDashboard() {
 
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <h4 className="font-semibold text-gray-900 mb-4">
-                    Cours populaires
+                    {t('popularCourses')}
                   </h4>
                   <div className="space-y-3">
                     {courses.slice(0, 3).map((course, index) => (
@@ -494,7 +499,7 @@ export default function AdminDashboard() {
                             {course.title}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {course.students} étudiants
+                            {course.students} {t('students')}
                           </p>
                         </div>
                       </div>
@@ -517,7 +522,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Rechercher un cours..."
+                      placeholder={t('searchCourse')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-colors"
                     />
                   </div>
@@ -527,7 +532,7 @@ export default function AdminDashboard() {
                   className="flex items-center space-x-2 bg-[#0096F0] text-white px-6 py-3 rounded-lg hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 font-semibold shadow-md"
                 >
                   <Plus className="w-5 h-5" />
-                  <span>Nouveau cours</span>
+                  <span>{t('addNewCourse')}</span>
                 </Link>
               </div>
             </div>
@@ -560,25 +565,25 @@ export default function AdminDashboard() {
                         <thead className="bg-gray-50 border-b border-gray-200">
                           <tr>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Cours
+                              {t('course')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Catégorie
+                              {t('category')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Statut
+                              {t('status')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Étudiants
+                              {t('studentsTab')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Note
+                              {t('rating')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Créé le
+                              {t('createdOn')}
                             </th>
                             <th className="text-right py-4 px-6 font-semibold text-gray-700">
-                              Actions
+                              {t('actions')}
                             </th>
                           </tr>
                         </thead>
@@ -631,7 +636,7 @@ export default function AdminDashboard() {
                               </td>
                               <td className="py-4 px-6">
                                 <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-medium bg-[#0096F0]/10 text-[#0096F0]">
-                                  {course.categoryName || "Sans catégorie"}
+                                  {course.categoryName || t('noCategory')}
                                 </span>
                               </td>
                               <td className="py-4 px-6">
@@ -688,14 +693,14 @@ export default function AdminDashboard() {
                                   <Link
                                     to={`/course/${course.id}`}
                                     className="p-2 text-gray-600 hover:text-[#0096F0] hover:bg-[#0096F0]/10 rounded-lg transition-all duration-200"
-                                    title="Voir le cours"
+                                    title={t('viewCourse')}
                                   >
                                     <Eye className="w-4 h-4" />
                                   </Link>
                                   <Link
                                     to={`/admin/course/edit/${course.id}`}
                                     className="p-2 text-gray-600 hover:text-[#DFB216] hover:bg-[#DFB216]/10 rounded-lg transition-all duration-200"
-                                    title="Modifier le cours"
+                                    title={t('editCourse')}
                                   >
                                     <Edit className="w-4 h-4" />
                                   </Link>
@@ -704,7 +709,7 @@ export default function AdminDashboard() {
                                       handleDeleteCourse(course.id)
                                     }
                                     className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200"
-                                    title="Supprimer le cours"
+                                    title={t('deleteCourse')}
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -719,13 +724,13 @@ export default function AdminDashboard() {
                     {coursesPage && coursesPage.totalPages > 1 && (
                       <div className="flex justify-between items-center py-4 px-6 border-t border-gray-200 bg-gray-50">
                         <div className="text-sm text-gray-600">
-                          Affichage de{" "}
-                          {coursesPage.number * coursesPage.size + 1} à{" "}
+                          {t('displaying')}{" "}
+                          {coursesPage.number * coursesPage.size + 1} {t('to')}{" "}
                           {Math.min(
                             (coursesPage.number + 1) * coursesPage.size,
                             coursesPage.totalElements
                           )}{" "}
-                          sur {coursesPage.totalElements} cours
+                          {t('on')} {coursesPage.totalElements} {t('courses')}
                         </div>
                         <div className="flex items-center space-x-2">
                           <button
@@ -735,7 +740,7 @@ export default function AdminDashboard() {
                             disabled={coursesPage.first}
                             className="px-3 py-2 text-sm border border-gray-200 rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            Précédent
+                            {t('previous')}
                           </button>
 
                           <div className="flex items-center space-x-1">
@@ -768,7 +773,7 @@ export default function AdminDashboard() {
                             disabled={coursesPage.last}
                             className="px-3 py-2 text-sm border border-gray-200 rounded-lg hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            Suivant
+                            {t('next')}
                           </button>
                         </div>
                       </div>
@@ -780,12 +785,12 @@ export default function AdminDashboard() {
                       <BookOpen className="w-10 h-10 text-gray-400" />
                     </div>
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {searchQuery ? "Aucun cours trouvé" : "Aucun cours créé"}
+                      {searchQuery ? t('noCourseFound') : t('noCoursesCreated')}
                     </h3>
                     <p className="text-gray-600 mb-6 max-w-md mx-auto">
                       {searchQuery
-                        ? "Essayez de modifier votre recherche ou de créer un nouveau cours."
-                        : "Commencez par créer votre premier cours pour vos étudiants et développez votre catalogue de formation."}
+                        ? t('noCourseFoundMessage')
+                        : t('noCoursesMessage')}
                     </p>
                     {!searchQuery && (
                       <Link
@@ -793,7 +798,7 @@ export default function AdminDashboard() {
                         className="inline-flex items-center space-x-2 bg-[#0096F0] text-white px-6 py-3 rounded-xl hover:bg-[#0080D6] transition-all duration-300 hover:scale-105 font-semibold shadow-md"
                       >
                         <Plus className="w-5 h-5" />
-                        <span>Créer votre premier cours</span>
+                        <span>{t('createFirstCourse')}</span>
                       </Link>
                     )}
                   </div>
@@ -814,7 +819,7 @@ export default function AdminDashboard() {
                       type="text"
                       value={usersSearchQuery}
                       onChange={(e) => setUsersSearchQuery(e.target.value)}
-                      placeholder="Rechercher un utilisateur..."
+                      placeholder={t('searchUser')}
                       className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-colors"
                     />
                   </div>
@@ -823,7 +828,7 @@ export default function AdminDashboard() {
                   <div className="text-sm text-gray-600">
                     {platformStats && (
                       <span>
-                        {platformStats.totalUsers} utilisateurs au total
+                        {platformStats.totalUsers} {t('totalUsers')}
                       </span>
                     )}
                   </div>
@@ -858,19 +863,19 @@ export default function AdminDashboard() {
                         <thead className="bg-gray-50 border-b border-gray-200">
                           <tr>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Utilisateur
+                              {t('user')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Email
+                              {t('email')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Rôle
+                              {t('role')}
                             </th>
                             <th className="text-left py-4 px-6 font-semibold text-gray-700">
-                              Inscription
+                              {t('registration')}
                             </th>
                             <th className="text-right py-4 px-6 font-semibold text-gray-700">
-                              Actions
+                              {t('actions')}
                             </th>
                           </tr>
                         </thead>
@@ -918,8 +923,8 @@ export default function AdminDashboard() {
                                     <Shield className="w-3 h-3 mr-1" />
                                   )}
                                   {user.role === "ADMIN"
-                                    ? "Administrateur"
-                                    : "Étudiant"}
+                                    ? t('administrator')
+                                    : t('student')}
                                 </span>
                               </td>
                               <td className="py-4 px-6 text-gray-700">
@@ -935,7 +940,7 @@ export default function AdminDashboard() {
                                         handleChangeUserRole(user.id, "ADMIN")
                                       }
                                       className="flex items-center space-x-1 px-3 py-1.5 text-xs bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition-colors"
-                                      title="Promouvoir admin"
+                                      title={t('promoteAdmin')}
                                     >
                                       <UserCheck className="w-4 h-4" />
                                       <span>Admin</span>
@@ -946,7 +951,7 @@ export default function AdminDashboard() {
                                         handleChangeUserRole(user.id, "USER")
                                       }
                                       className="flex items-center space-x-1 px-3 py-1.5 text-xs bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors"
-                                      title="Rétrograder utilisateur"
+                                      title={t('demoteUser')}
                                     >
                                       <UserX className="w-4 h-4" />
                                       <span>User</span>
@@ -957,7 +962,7 @@ export default function AdminDashboard() {
                                       handleDeleteUser(user.id, user.email)
                                     }
                                     className="flex items-center justify-center p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                    title="Supprimer utilisateur"
+                                    title={t('deleteUser')}
                                   >
                                     <Trash2 className="w-4 h-4" />
                                   </button>
@@ -978,12 +983,12 @@ export default function AdminDashboard() {
                           disabled={usersPage.first}
                           className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          Précédent
+                          {t('previous')}
                         </button>
 
                         <span className="text-sm text-gray-600">
-                          Page {usersPage.number + 1} sur {usersPage.totalPages}{" "}
-                          ({usersPage.totalElements} utilisateurs)
+                          {t('page')} {usersPage.number + 1} {t('on')} {usersPage.totalPages}{" "}
+                          ({usersPage.totalElements} {t('totalUsers')})
                         </span>
 
                         <button
@@ -993,7 +998,7 @@ export default function AdminDashboard() {
                           disabled={usersPage.last}
                           className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          Suivant
+                          {t('next')}
                         </button>
                       </div>
                     )}
@@ -1003,13 +1008,13 @@ export default function AdminDashboard() {
                     <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
                       {usersSearchQuery
-                        ? "Aucun utilisateur trouvé"
-                        : "Aucun utilisateur"}
+                        ? t('noUsersFound')
+                        : t('noUsers')}
                     </h3>
                     <p className="text-gray-600">
                       {usersSearchQuery
-                        ? "Essayez de modifier votre recherche."
-                        : "Les nouveaux utilisateurs apparaîtront ici."}
+                        ? t('noUsersFoundMessage')
+                        : t('noUsersMessage')}
                     </p>
                   </div>
                 )}
@@ -1022,7 +1027,7 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-sm text-gray-600">
-                        Total utilisateurs
+                        {t('totalUsers')}
                       </p>
                       <p className="text-2xl font-bold text-gray-900">
                         {platformStats.totalUsers}
@@ -1037,7 +1042,7 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Étudiants</p>
+                      <p className="text-sm text-gray-600">{t('studentsTab')}</p>
                       <p className="text-2xl font-bold text-gray-900">
                         {platformStats.totalStudents}
                       </p>
@@ -1051,7 +1056,7 @@ export default function AdminDashboard() {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-600">Administrateurs</p>
+                      <p className="text-sm text-gray-600">{t('totalAdministrators')}</p>
                       <p className="text-2xl font-bold text-gray-900">
                         {platformStats.totalAdmins}
                       </p>
