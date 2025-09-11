@@ -85,6 +85,12 @@ export default function AdminDashboard() {
     }
   }, [activeTab, currentPage, usersCurrentPage]);
 
+  // Charger les statistiques au premier rendu de la page
+  useEffect(() => {
+    loadCourses();
+    loadPlatformStats();
+  }, []);
+
   useEffect(() => {
     if (activeTab === "users") {
       const timeoutId = setTimeout(() => {
@@ -242,12 +248,12 @@ export default function AdminDashboard() {
         <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-[#CD010A] mb-2">
                 {t('adminDashboard')}
               </h1>
-              <p className="text-gray-600 flex items-center space-x-2">
+              <p className="text-gray-400 flex items-center space-x-2">
                 <Calendar className="w-4 h-4" />
-                <span>
+                <span className="text-sm ">
                   {t('today')},{" "}
                   {new Date().toLocaleDateString(lang === 'fr' ? "fr-FR" : "en-US", {
                     weekday: "long",
@@ -305,10 +311,10 @@ export default function AdminDashboard() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-12 h-12 bg-[#0096F0]/10 rounded-xl flex items-center justify-center">
                     <BookOpen className="w-6 h-6 text-[#0096F0]" />
-                  </div>
+                  </div> 
                   <div className="text-right">
                     <p className="text-2xl font-bold text-gray-900">
-                      {courses.length}
+                      {filteredCourses.length}
                     </p>
                     <p className="text-sm text-gray-600">{t('coursesCreated')}</p>
                   </div>
@@ -338,48 +344,6 @@ export default function AdminDashboard() {
                   <div className="flex items-center space-x-1 text-sm">
                     <TrendingUp className="w-4 h-4 text-green-500" />
                     <span className="text-green-500 font-semibold">+156</span>
-                    <span className="text-gray-600">{t('thisMonth')}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Award className="w-6 h-6 text-green-600" />
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stats.totalCompletions.toLocaleString()}
-                    </p>
-                    <p className="text-sm text-gray-600">{t('completedCourses')}</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-1 text-sm">
-                    <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="text-green-500 font-semibold">+89</span>
-                    <span className="text-gray-600">{t('thisMonth')}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
-                    <Star className="w-6 h-6 text-yellow-600" />
-                  </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-gray-900">
-                      {stats.averageRating}/5
-                    </p>
-                    <p className="text-sm text-gray-600">{t('overallRating')}</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-1 text-sm">
-                    <TrendingUp className="w-4 h-4 text-green-500" />
-                    <span className="text-green-500 font-semibold">+0.2</span>
                     <span className="text-gray-600">{t('thisMonth')}</span>
                   </div>
                 </div>
@@ -453,57 +417,32 @@ export default function AdminDashboard() {
               <div className="space-y-6">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                   <h4 className="font-semibold text-gray-900 mb-4">
-                    {t('monthlyPerformance')}
-                  </h4>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">
-                        {t('newStudents')}
-                      </span>
-                      <span className="font-semibold text-gray-900">+156</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">
-                        {t('completionRate')}
-                      </span>
-                      <span className="font-semibold text-green-600">78%</span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">
-                        {t('satisfaction')}
-                      </span>
-                      <span className="font-semibold text-yellow-600">
-                        4.8★
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-                  <h4 className="font-semibold text-gray-900 mb-4">
                     {t('popularCourses')}
                   </h4>
-                  <div className="space-y-3">
-                    {courses.slice(0, 3).map((course, index) => (
-                      <div
-                        key={course.id}
-                        className="flex items-center space-x-3"
-                      >
-                        <div className="w-8 h-8 bg-[#0096F0]/10 rounded-lg flex items-center justify-center">
-                          <span className="text-sm font-bold text-[#0096F0]">
-                            #{index + 1}
-                          </span>
+                  <div className="block w-full overflow-x-auto space-y-3">
+                    {[...courses]
+                      .sort((a, b) => b.students - a.students)
+                      .slice(0, 3)
+                      .map((course, index) => (
+                        <div
+                          key={course.id}
+                          className="flex items-center space-x-3"
+                        >
+                          <div className="w-8 h-8 bg-[#0096F0]/10 rounded-lg flex items-center justify-center">
+                            <span className="text-sm font-bold text-[#0096F0]">
+                              #{index + 1}
+                            </span>
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900 ">
+                              {course.title}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              {course.students} {t('students')}
+                            </p>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {course.title}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {course.students} {t('students')}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
+                      ))}
                   </div>
                 </div>
               </div>

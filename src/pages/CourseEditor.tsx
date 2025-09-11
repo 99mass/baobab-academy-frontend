@@ -643,10 +643,117 @@ export default function CourseEditor() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="w-8 h-8 border-4 border-[#0096F0] border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-gray-600">Chargement du cours...</p>
+      <div className="min-h-screen bg-gray-50">
+        {/* Skeleton Header */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center space-x-4">
+              <div className="h-6 bg-gray-200 rounded animate-pulse w-32"></div>
+              <div className="h-6 w-px bg-gray-300"></div>
+              <div className="h-8 bg-gray-200 rounded animate-pulse w-48"></div>
+            </div>
+            <div className="h-10 bg-gray-200 rounded animate-pulse w-32"></div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content Skeleton */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Course Info Card */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-48 mb-6"></div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                  <div className="md:col-span-2 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    <div className="h-24 bg-gray-200 rounded animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Details Card */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-40 mb-6"></div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((item) => (
+                    <div key={item} className="space-y-3">
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                      <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Chapters Section */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="flex justify-between items-center mb-6">
+                  <div className="h-6 bg-gray-200 rounded animate-pulse w-32"></div>
+                  <div className="h-10 bg-gray-200 rounded animate-pulse w-24"></div>
+                </div>
+                
+                <div className="space-y-4">
+                  {[1, 2, 3].map((chapter) => (
+                    <div key={chapter} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="h-5 bg-gray-200 rounded animate-pulse w-48"></div>
+                        <div className="h-8 bg-gray-200 rounded animate-pulse w-20"></div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        {[1, 2].map((lesson) => (
+                          <div key={lesson} className="flex justify-between items-center p-3 bg-gray-50 rounded">
+                            <div className="flex items-center space-x-3">
+                              <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                              <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                            </div>
+                            <div className="h-6 bg-gray-200 rounded animate-pulse w-16"></div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sidebar Skeleton */}
+            <div className="space-y-6">
+              {/* Actions Card */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-20 mb-6"></div>
+                <div className="space-y-4">
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                  <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+                </div>
+              </div>
+
+              {/* Stats Card */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-24 mb-6"></div>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-8"></div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-8"></div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-18"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-12"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -287,10 +287,128 @@ export default function CourseDetail() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-[#0096F0] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">{t('loadingCourse')}</p>
+      <div className="min-h-screen bg-gray-50">
+        {/* Skeleton Header */}
+        <div className="bg-gradient-to-r from-[#0096F0] to-purple-600 text-white">
+          <div className="container mx-auto px-4 py-16">
+            <div className="max-w-4xl mx-auto">
+              <div className="h-4 bg-white/20 rounded animate-pulse w-24 mb-4"></div>
+              <div className="h-8 bg-white/20 rounded animate-pulse w-3/4 mb-4"></div>
+              <div className="h-4 bg-white/20 rounded animate-pulse w-1/2 mb-6"></div>
+              
+              <div className="flex flex-wrap gap-4 mb-6">
+                <div className="h-6 bg-white/20 rounded animate-pulse w-16"></div>
+                <div className="h-6 bg-white/20 rounded animate-pulse w-20"></div>
+                <div className="h-6 bg-white/20 rounded animate-pulse w-24"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Skeleton Main Content */}
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            {/* Left Content Skeleton */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Progress Card Skeleton */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-32 mb-4"></div>
+                <div className="w-full bg-gray-200 rounded-full h-2 mb-2 animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+              </div>
+
+              {/* About Section Skeleton */}
+              <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200">
+                <div className="h-8 bg-gray-200 rounded animate-pulse w-48 mb-6"></div>
+                <div className="space-y-4">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-4/5"></div>
+                </div>
+
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-40 mb-4 mt-8"></div>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-64"></div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-48"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Content Skeleton */}
+              <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-200">
+                <div className="h-8 bg-gray-200 rounded animate-pulse w-40 mb-6"></div>
+                {[1, 2, 3].map((chapter) => (
+                  <div key={chapter} className="border border-gray-200 rounded-lg mb-4">
+                    <div className="p-4 bg-gray-50">
+                      <div className="flex items-center justify-between">
+                        <div className="h-6 bg-gray-200 rounded animate-pulse w-48"></div>
+                        <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                      </div>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      {[1, 2, 3].map((lesson) => (
+                        <div key={lesson} className="flex items-center justify-between p-3 bg-gray-50 rounded">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                          </div>
+                          <div className="h-8 bg-gray-200 rounded animate-pulse w-16"></div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Sidebar Skeleton */}
+            <div className="space-y-6">
+              {/* Enrollment Card Skeleton */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-10 bg-gray-200 rounded animate-pulse w-full mb-4"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse w-32 mb-6"></div>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-5 h-5 bg-gray-200 rounded animate-pulse"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Course Info Skeleton */}
+              <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-32 mb-4"></div>
+                <div className="space-y-4">
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-12"></div>
+                  </div>
+                  <div className="flex justify-between">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -301,13 +419,13 @@ export default function CourseDetail() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {error || "Cours non trouvé"}
+            {error || t('courseNotFound')}
           </h1>
           <Link
             to="/courses"
             className="text-[#0096F0] hover:text-[#0080D6] transition-colors"
           >
-            Retour aux cours
+            {t('detailBackToCourses')}
           </Link>
         </div>
       </div>
@@ -372,13 +490,13 @@ export default function CourseDetail() {
                     className="inline-flex items-center text-white/80 hover:text-white transition-colors"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
-                    Retour aux cours
+                    {t('detailBackToCourses')}
                   </Link>
                 </nav>
 
                 <div className="mb-4">
                   <span className="inline-block px-3 py-1 bg-[#DFB216]/90 text-white rounded-full text-sm font-medium mb-4">
-                    {course.categoryName || "Général"}
+                    {course.categoryName || t('general')}
                   </span>
                 </div>
 
@@ -397,7 +515,7 @@ export default function CourseDetail() {
                   </div>
                   <div className="flex items-center space-x-2">
                     <BookOpen className="w-5 h-5" />
-                    <span>{getTotalLessons()} leçons</span>
+                    <span>{getTotalLessons()} {t('detailLessons')}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <BarChart className="w-5 h-5" />
@@ -412,7 +530,7 @@ export default function CourseDetail() {
                   <div className="flex items-center space-x-2">
                     <Users className="w-5 h-5" />
                     <span>
-                      {course.students?.toLocaleString() || 0} étudiants
+                      {course.students?.toLocaleString() || 0} {t('detailStudents')}
                     </span>
                   </div>
                   <button
@@ -436,7 +554,7 @@ export default function CourseDetail() {
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-semibold text-gray-900">
-                    Votre progression
+                    {t('yourProgress')}
                   </h2>
                   <span className="text-[#0096F0] font-medium">
                     {Math.round(progressPercentage)}%
@@ -449,8 +567,7 @@ export default function CourseDetail() {
                   ></div>
                 </div>
                 <p className="text-sm text-gray-600">
-                  {getCompletedLessons()} sur {getTotalLessons()} leçons
-                  terminées
+                  {getCompletedLessons()} {t('onOut')} {getTotalLessons()} {t('detailLessons')} {t('lessonsCompleted')}
                 </p>
               </div>
             )}
@@ -462,47 +579,45 @@ export default function CourseDetail() {
                     <Users className="w-4 h-4 text-purple-600" />
                   </div>
                   <h2 className="text-lg font-semibold text-purple-800">
-                    Mode Administrateur
+                    {t('administratorMode')}
                   </h2>
                 </div>
                 <p className="text-purple-700 text-sm">
-                  Vous visualisez ce cours en tant qu'administrateur. Vous avez
-                  accès à toutes les fonctionnalités.
+                  {t('adminViewMessage')}
                 </p>
               </div>
             )}
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                À propos de ce cours
+                {t('aboutCourse')}
               </h2>
               <div className="prose prose-lg max-w-none text-gray-700">
                 <p className="mb-4">{course.description}</p>
 
                 <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-2">
-                  Ce que vous allez apprendre
+                  {t('detailWhatYouWillLearn')}
                 </h3>
                 <ul className="space-y-2">
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                    <span>Maîtriser les concepts fondamentaux du domaine</span>
+                    <span>{t('masterFundamentals')}</span>
                   </li>
                   <li className="flex items-start space-x-3">
                     <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                     <span>
-                      Acquérir des compétences pratiques et applicables
+                      {t('acquirePracticalSkills')}
                     </span>
                   </li>
                 </ul>
 
                 <h3 className="text-xl font-semibold text-gray-900 mt-8 mb-2">
-                  Prérequis
+                  {t('detailPrerequisites')}
                 </h3>
                 <ul className="space-y-2">
-                  <li>• Motivation pour apprendre et pratiquer</li>
+                  <li>• {t('motivationToLearn')}</li>
                   <li>
-                    • Un ordinateur ou une tablette ou un smartphone avec accès
-                    à Internet
+                    • {t('deviceWithInternet')}
                   </li>
                 </ul>
               </div>
@@ -510,7 +625,7 @@ export default function CourseDetail() {
 
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
               <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Contenu du cours
+                {t('detailCourseContent')}
               </h2>
 
               <div className="space-y-4">
@@ -534,7 +649,7 @@ export default function CourseDetail() {
                             {chapter.title}
                           </h3>
                           <p className="text-sm text-gray-600">
-                            {chapter.lessons?.length || 0} leçons
+                            {chapter.lessons?.length || 0} {t('detailLessons')}
                           </p>
                         </div>
                       </div>
@@ -560,10 +675,10 @@ export default function CourseDetail() {
                                 </h4>
                                 <p className="text-sm text-gray-600">
                                   {lesson.contentType === "VIDEO"
-                                    ? "Vidéo"
+                                    ? t('detailVideo')
                                     : lesson.contentType === "TEXT"
-                                    ? "Texte"
-                                    : "Document"}
+                                    ? t('detailText')
+                                    : t('detailDocument')}
                                 </p>
                               </div>
                             </div>
@@ -572,7 +687,7 @@ export default function CourseDetail() {
                                 to={`/player/${course.id}/${lesson.id}`}
                                 className="text-[#0096F0] hover:text-[#0080D6] transition-colors text-sm font-medium"
                               >
-                                {isAdmin ? "Prévisualiser" : "Commencer"}
+                                {isAdmin ? t('detailPreview') : t('detailStart')}
                               </Link>
                             )}
                           </div>
@@ -583,7 +698,7 @@ export default function CourseDetail() {
                 )) || (
                   <div className="text-center py-8 text-gray-500">
                     <BookOpen className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                    <p>Le contenu du cours sera bientôt disponible.</p>
+                    <p>{t('contentSoonAvailable')}</p>
                   </div>
                 )}
               </div>
@@ -596,14 +711,14 @@ export default function CourseDetail() {
                 {enrolled || isAdmin ? (
                   <>
                     <h3 className="text-xl font-bold text-gray-900 mb-6">
-                      {isAdmin ? "Aperçu Administrateur" : "Votre parcours"}
+                      {isAdmin ? t('administratorPreview') : t('yourJourney')}
                     </h3>
 
                     {enrolled && !isAdmin && (
                       <div className="mb-6">
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-sm font-medium text-gray-700">
-                            Progression
+                            {t('detailProgression')}
                           </span>
                           <span className="text-sm font-medium text-[#0096F0]">
                             {Math.round(progressPercentage)}%
@@ -625,10 +740,10 @@ export default function CourseDetail() {
                       <Play className="w-5 h-5" />
                       <span>
                         {isAdmin
-                          ? "Prévisualiser le cours"
+                          ? t('previewCourse')
                           : progressPercentage && progressPercentage > 0
-                          ? "Continuer le cours"
-                          : "Commencer le cours"}
+                          ? t('detailContinueCourse')
+                          : t('detailStartCourse')}
                       </span>
                     </Link>
 
@@ -637,7 +752,7 @@ export default function CourseDetail() {
                         to={`/admin/course/edit/${course.id}`}
                         className="w-full border border-[#0096F0] text-[#0096F0] py-3 rounded-lg font-medium hover:bg-[#0096F0]/10 transition-colors text-center block"
                       >
-                        ⚙️ Modifier le cours
+                        ⚙️ {t('detailEditCourse')}
                       </Link>
                     )}
                   </>
@@ -645,9 +760,9 @@ export default function CourseDetail() {
                   <>
                     <div className="text-center mb-6">
                       <div className="text-3xl font-bold text-gray-900 mb-2">
-                        Gratuit
+                        {t('free')}
                       </div>
-                      <p className="text-gray-600">Accès illimité à vie</p>
+                      <p className="text-gray-600">{t('lifetimeAccess')}</p>
                     </div>
 
                     {isAuthenticated ? (
@@ -659,35 +774,35 @@ export default function CourseDetail() {
                         {enrolling ? (
                           <div className="flex items-center justify-center space-x-2">
                             <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                            <span>Inscription en cours...</span>
+                            <span>{t('enrolling')}</span>
                           </div>
                         ) : (
                           <div className="flex items-center justify-center space-x-2">
                             <Users className="w-5 h-5" />
-                            <span>S'inscrire gratuitement</span>
+                            <span>{t('enrollForFree')}</span>
                           </div>
                         )}
                       </button>
                     ) : (
                       <Link to="/auth">
                         <button className="w-full bg-[#0096F0] text-white py-4 rounded-lg font-semibold hover:bg-[#0080D6] transition-colors mb-4">
-                          S'inscrire gratuitement
+                          {t('enrollForFree')}
                         </button>
                       </Link>
                     )}
 
                     <p className="text-center text-sm text-gray-500 mb-6">
-                      Cours entièrement gratuit
+                      {t('completelyFree')}
                     </p>
 
                     <div className="space-y-3 text-sm">
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                        <span>Accès illimité au cours</span>
+                        <span>{t('unlimitedAccess')}</span>
                       </div>
                       <div className="flex items-center space-x-3">
                         <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
-                        <span>Ressources téléchargeables</span>
+                        <span>{t('downloadableResources')}</span>
                       </div>
                     </div>
                   </>
@@ -696,16 +811,16 @@ export default function CourseDetail() {
 
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">
-                  Informations du cours
+                  {t('courseInformation')}
                 </h3>
 
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Durée totale</span>
+                    <span className="text-gray-600">{t('totalDuration')}</span>
                     <span className="font-medium">{course.duration}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Niveau</span>
+                    <span className="text-gray-600">{t('detailLevel')}</span>
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${getLevelColor(
                         course.level
@@ -715,7 +830,7 @@ export default function CourseDetail() {
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Dernière mise à jour</span>
+                    <span className="text-gray-600">{t('lastUpdate')}</span>
                     <span className="font-medium">
                       {course.updatedAt
                         ? new Date(course.updatedAt).toLocaleDateString(
@@ -725,13 +840,13 @@ export default function CourseDetail() {
                               year: "numeric",
                             }
                           )
-                        : "Récemment"}
+                        : t('detailRecently')}
                     </span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600">Catégorie</span>
+                    <span className="text-gray-600">{t('detailCategory')}</span>
                     <span className="font-medium">
-                      {course.categoryName || "Général"}
+                      {course.categoryName || t('general')}
                     </span>
                   </div>
                 </div>

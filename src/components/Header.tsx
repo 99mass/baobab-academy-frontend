@@ -106,14 +106,13 @@ export default function Header({
           {/* Logo avec description */}
           <Link to="/" className="flex items-center space-x-3 group">
             <img src="/logo_fibem.png" alt="FIBEM Logo" className="w-26 h-12" />
-             <div className="hidden sm:block  bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium  animate-bounce-in">
-                 {t('platformDescription')}
-              </div>
+            <div className="hidden sm:block  bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium  animate-bounce-in">
+              {t("platformDescription")}
+            </div>
           </Link>
 
           {/* Language Switcher and Search */}
           <div className="flex items-center justify-end flex-1 mx-4">
-          
             {/* Recherche par catégorie */}
             <div ref={searchRef} className="relative">
               <div
@@ -126,7 +125,7 @@ export default function Header({
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                     <input
                       type="text"
-                      placeholder={t('searchPlaceholder')}
+                      placeholder={t("searchPlaceholder")}
                       className="w-full pl-10 pr-4 py-2.5 border-2 border-blue-500 rounded-full focus:outline-none text-sm"
                       value={searchQuery}
                       onChange={handleSearchChange}
@@ -156,7 +155,7 @@ export default function Header({
                 )}
               </div>
             </div>
-              {/* Language Switcher */}
+            {/* Language Switcher */}
             <div className="relative group mr-0">
               <button className="flex items-center space-x-2 px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200 font-medium">
                 <img
@@ -212,7 +211,7 @@ export default function Header({
               }`}
             >
               <Home className="w-4 h-4" />
-              <span>{t('home')}</span>
+              <span>{t("home")}</span>
             </Link>
 
             <Link
@@ -224,7 +223,7 @@ export default function Header({
               }`}
             >
               <BookOpen className="w-4 h-4" />
-              <span>{t('catalogCourses')}</span>
+              <span>{t("catalogCourses")}</span>
             </Link>
 
             {isAuthenticated ? (
@@ -259,7 +258,7 @@ export default function Header({
                       className="flex items-center px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
                     >
                       <UserIcon className="w-4 h-4 text-blue-600" />
-                      <span>{t('profile')}</span>
+                      <span>{t("profile")}</span>
                     </Link>
                     <hr className="my-2 border-gray-100" />
                     <button
@@ -277,7 +276,7 @@ export default function Header({
                 to="/auth"
                 className="bg-blue-600 text-white px-6 py-2.5 rounded-lg hover:bg-blue-700 active:bg-blue-800 transition-all duration-200 font-medium shadow-sm hover:shadow-md ml-4"
               >
-                {t('login')}
+                {t("login")}
               </Link>
             )}
           </nav>
@@ -310,7 +309,7 @@ export default function Header({
               onClick={() => setIsMenuOpen(false)}
             >
               <Home className="w-5 h-5" />
-              <span>{t('home')}</span>
+              <span>{t("home")}</span>
             </Link>
 
             <Link
@@ -390,7 +389,7 @@ export default function Header({
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <UserIcon className="w-5 h-5" />
-                  <span>{t('profile')}</span>
+                  <span>{t("profile")}</span>
                 </Link>
 
                 <Link
@@ -419,7 +418,7 @@ export default function Header({
                   className="block px-4 py-3 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700 transition-colors shadow-sm"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {t('login')}
+                  {t("login")}
                 </Link>
               </div>
             )}

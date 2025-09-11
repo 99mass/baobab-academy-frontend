@@ -752,12 +752,16 @@ import {
 } from "lucide-react";
 import { courseService } from "../services/courseService";
 import { useAuth } from "../hooks/useAuth";
+import { useLanguage } from "../contexts/LanguageContext";
+import { useTranslation } from "../utils/translations";
 import type { Chapter, Lesson, CourseWithProgress } from "../types/course";
 
 export default function CoursePlayer() {
   const { id, lessonId } = useParams<{ id: string; lessonId?: string }>();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { lang } = useLanguage();
+  const { t } = useTranslation(lang);
 
   const [courseData, setCourseData] = useState<CourseWithProgress | null>(null);
   const [loading, setLoading] = useState(true);
@@ -904,7 +908,39 @@ export default function CoursePlayer() {
 
       await courseService.markLessonAsCompleted(currentLessonId);
 
-      await loadCourseWithProgress();
+      // Mise à jour locale des données sans recharger toute la page
+      setCourseData(prevData => {
+        if (!prevData) return prevData;
+        
+        // Mettre à jour la progression utilisateur
+        const updatedUserProgress = prevData.userProgress.map(progress => 
+          progress.lessonId === currentLessonId 
+            ? { ...progress, completed: true, progressPercentage: 100 }
+            : progress
+        );
+        
+        // Ajouter la leçon si elle n'existe pas dans userProgress
+        const lessonExists = prevData.userProgress.some(p => p.lessonId === currentLessonId);
+        if (!lessonExists) {
+          updatedUserProgress.push({
+            lessonId: currentLessonId,
+            completed: true,
+            progressPercentage: 100,
+            watchTimeSeconds: 0
+          });
+        }
+        
+        // Recalculer les statistiques
+        const completedLessons = updatedUserProgress.filter(p => p.completed).length;
+        const progressPercentage = (completedLessons / prevData.totalLessons) * 100;
+        
+        return {
+          ...prevData,
+          userProgress: updatedUserProgress,
+          completedLessons,
+          progressPercentage
+        };
+      });
 
       console.log("✅ Leçon marquée comme complétée avec succès");
     } catch (err: any) {
@@ -932,10 +968,76 @@ export default function CoursePlayer() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-[#0096F0] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement du cours...</p>
+      <div className="min-h-screen bg-white flex">
+        {/* Skeleton Sidebar */}
+        <div className="w-80 pt-5 bg-white border-r border-gray-200 flex flex-col">
+          <div className="p-4 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between mb-3">
+              <div className="h-4 bg-gray-200 rounded animate-pulse w-24"></div>
+            </div>
+            <div className="h-5 bg-gray-200 rounded animate-pulse w-48 mb-3"></div>
+            
+            <div className="mt-3">
+              <div className="flex items-center justify-between text-sm mb-1">
+                <div className="h-3 bg-gray-200 rounded animate-pulse w-16"></div>
+                <div className="h-3 bg-gray-200 rounded animate-pulse w-8"></div>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 animate-pulse"></div>
+              <div className="h-3 bg-gray-200 rounded animate-pulse w-20 mt-1"></div>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4">
+            {[1, 2, 3].map((chapter) => (
+              <div key={chapter} className="mb-6">
+                <div className="h-5 bg-gray-200 rounded animate-pulse w-32 mb-3"></div>
+                <div className="space-y-2">
+                  {[1, 2, 3].map((lesson) => (
+                    <div key={lesson} className="flex items-center space-x-3 p-3 bg-gray-50 rounded">
+                      <div className="w-5 h-5 bg-gray-200 rounded-full animate-pulse"></div>
+                      <div className="flex-1">
+                        <div className="h-4 bg-gray-200 rounded animate-pulse w-24 mb-1"></div>
+                        <div className="h-3 bg-gray-200 rounded animate-pulse w-16"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Skeleton Main Content */}
+        <div className="flex-1 flex flex-col pt-5">
+          <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+            <div className="h-6 bg-gray-200 rounded animate-pulse w-48"></div>
+            <div className="h-5 bg-gray-200 rounded animate-pulse w-20"></div>
+          </div>
+
+          <div className="flex-1 bg-gray-50 p-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+                <div className="h-8 bg-gray-200 rounded animate-pulse w-64 mb-6"></div>
+                <div className="space-y-4">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-5/6"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-4/5"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border-t border-gray-200 p-6">
+            <div className="max-w-4xl mx-auto flex items-center justify-between">
+              <div className="h-10 bg-gray-200 rounded animate-pulse w-24"></div>
+              <div className="flex space-x-4">
+                <div className="h-10 bg-gray-200 rounded animate-pulse w-32"></div>
+                <div className="h-10 bg-gray-200 rounded animate-pulse w-20"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -946,21 +1048,21 @@ export default function CoursePlayer() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            {error || "Cours non trouvé"}
+            {error || t('playerCourseNotFound')}
           </h1>
           <div className="space-y-4">
             <Link
               to={`/course/${id}`}
               className="inline-block text-[#0096F0] hover:text-[#0080D6] transition-colors"
             >
-              Retour au cours
+              {t('playerBackToCourse')}
             </Link>
             <br />
             <Link
               to="/courses"
               className="inline-block text-gray-600 hover:text-gray-800 transition-colors"
             >
-              Retour aux cours
+              {t('detailBackToCourses')}
             </Link>
           </div>
         </div>
@@ -987,13 +1089,13 @@ export default function CoursePlayer() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Leçon non trouvée
+            {t('lessonNotFound')}
           </h1>
           <Link
             to={`/course/${id}`}
             className="text-[#0096F0] hover:text-[#0080D6] transition-colors"
           >
-            Retour au cours
+            {t('playerBackToCourse')}
           </Link>
         </div>
       </div>
@@ -1014,7 +1116,7 @@ export default function CoursePlayer() {
               className="flex items-center text-gray-600 hover:text-[#0096F0] transition-colors text-sm"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Retour au cours
+              {t('playerBackToCourse')}
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}
@@ -1029,7 +1131,7 @@ export default function CoursePlayer() {
 
           <div className="mt-3">
             <div className="flex items-center justify-between text-sm text-gray-600 mb-1">
-              <span>Progression</span>
+              <span>{t('playerProgress')}</span>
               <span>{Math.round(courseData.progressPercentage)}%</span>
             </div>
             <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1039,7 +1141,7 @@ export default function CoursePlayer() {
               ></div>
             </div>
             <div className="text-xs text-gray-500 mt-1">
-              {courseData.completedLessons} / {courseData.totalLessons} leçons
+              {courseData.completedLessons} / {courseData.totalLessons} {t('playerLessonsCount')}
             </div>
           </div>
         </div>
@@ -1059,7 +1161,7 @@ export default function CoursePlayer() {
                 <div
                   className={`p-4 transition-colors ${
                     isChapterCompleted
-                      ? "bg-green-50 border-l-4 border-l-green-500"
+                      ? "bg-blue-50 border-l-4 border-l-[#0096F0]"
                       : completedLessons > 0
                       ? "bg-blue-50 border-l-4 border-l-[#0096F0]"
                       : "bg-gray-50"
@@ -1068,22 +1170,22 @@ export default function CoursePlayer() {
                   <div className="flex items-center justify-between">
                     <h3
                       className={`font-medium ${
-                        isChapterCompleted ? "text-green-700" : "text-gray-900"
+                        isChapterCompleted ? "text-[#0096F0]" : "text-gray-900"
                       }`}
                     >
                       {chapter.title}
                     </h3>
                     {isChapterCompleted && (
-                      <CheckCircle className="w-5 h-5 text-green-600" />
+                      <CheckCircle className="w-5 h-5 text-[#0096F0]" />
                     )}
                   </div>
                   <div className="flex items-center justify-between mt-1">
                     <p
                       className={`text-sm ${
-                        isChapterCompleted ? "text-green-600" : "text-gray-600"
+                        isChapterCompleted ? "text-[#0096F0]" : "text-gray-600"
                       }`}
                     >
-                      {completedLessons} / {totalLessons} leçons
+                      {completedLessons} / {totalLessons} {t('playerLessonsCount')}
                     </p>
                     {completedLessons > 0 && !isChapterCompleted && (
                       <div className="w-16 bg-gray-200 rounded-full h-1">
@@ -1112,17 +1214,17 @@ export default function CoursePlayer() {
                         className={`w-full p-4 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 relative ${
                           isCurrentLesson
                             ? lessonStatus === "completed"
-                              ? "bg-green-50 border-r-4 border-r-green-500"
+                              ? "bg-blue-50 border-r-4 border-r-[#0096F0]"
                               : "bg-blue-50 border-r-4 border-r-[#0096F0]"
                             : lessonStatus === "completed"
-                            ? "bg-green-25 hover:bg-green-50"
+                            ? "bg-blue-25 hover:bg-blue-50"
                             : ""
                         }`}
                       >
                         <div className="flex items-center space-x-3">
                           <div className="flex-shrink-0">
                             {lessonStatus === "completed" ? (
-                              <CheckCircle className="w-5 h-5 text-green-600" />
+                              <CheckCircle className="w-5 h-5 text-[#0096F0]" />
                             ) : isCurrentLesson ? (
                               <PlayCircle className="w-5 h-5 text-[#0096F0]" />
                             ) : lessonStatus === "in-progress" ? (
@@ -1151,10 +1253,10 @@ export default function CoursePlayer() {
                                 className={`font-medium truncate ${
                                   isCurrentLesson
                                     ? lessonStatus === "completed"
-                                      ? "text-green-700"
+                                      ? "text-[#0096F0]"
                                       : "text-[#0096F0]"
                                     : lessonStatus === "completed"
-                                    ? "text-green-700"
+                                    ? "text-[#0096F0]"
                                     : "text-gray-900"
                                 }`}
                               >
@@ -1165,16 +1267,16 @@ export default function CoursePlayer() {
                               <p
                                 className={`text-xs ${
                                   lessonStatus === "completed"
-                                    ? "text-green-600"
+                                    ? "text-[#0096F0]"
                                     : "text-gray-500"
                                 }`}
                               >
                                 {lesson.contentType === "VIDEO"
-                                  ? "Vidéo"
+                                  ? t('detailVideo')
                                   : lesson.contentType === "TEXT"
-                                  ? "Texte"
-                                  : "Document"}
-                                {lessonStatus === "completed" && " • Terminée"}
+                                  ? t('detailText')
+                                  : t('detailDocument')}
+                                {lessonStatus === "completed" && ` • ${t('playerCompleted')}`}
                               </p>
                             </div>
                           </div>
@@ -1211,7 +1313,7 @@ export default function CoursePlayer() {
             {isCurrentLessonCompleted && (
               <span className="flex items-center text-green-600 text-sm font-medium">
                 <CheckCircle className="w-4 h-4 mr-1" />
-                Terminé
+                {t('playerCompleted')}
               </span>
             )}
           </div>
@@ -1219,15 +1321,16 @@ export default function CoursePlayer() {
 
         <div className="flex-1 bg-gray-50">
           {currentLesson.contentType === "VIDEO" && currentLesson.videoUrl ? (
-            <div className="bg-black">
-              <div className="max-w-6xl mx-auto">
-                <div className="aspect-video">
+            <div className="p-8">
+              <div className="max-w-4xl mx-auto">
+                <div className="bg-black rounded-xl overflow-hidden shadow-lg">
+                  <div className="aspect-video">
                   {isYouTubeUrl(currentLesson.videoUrl) ? (
                     <iframe
                       src={getYouTubeEmbedUrl(currentLesson.videoUrl)}
                       title={currentLesson.title}
                       className="w-full h-full"
-                      frameBorder="0"
+                      style={{ border: 0 }}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     />
@@ -1254,25 +1357,27 @@ export default function CoursePlayer() {
                         }
                       }}
                     >
-                      Votre navigateur ne supporte pas la lecture vidéo.
+                      {t('videoNotSupported')}
                     </video>
                   )}
+                  </div>
                 </div>
               </div>
             </div>
           ) : currentLesson.contentType === "DOCUMENT" &&
             currentLesson.documentUrl ? (
             <div className="p-8">
-              <div className="max-w-6xl mx-auto">
+              <div className="max-w-4xl mx-auto">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                  <div className="h-[600px] bg-gray-100">
+                  <div className="h-[500px] bg-gray-100">
                     {currentLesson.documentUrl
                       .toLowerCase()
                       .endsWith(".pdf") ? (
                       <iframe
                         src={`${currentLesson.documentUrl}#toolbar=1&navpanes=1&scrollbar=1`}
                         title={currentLesson.title}
-                        className="w-full h-full border-0"
+                        className="w-full h-full"
+                        style={{ border: 0 }}
                         onLoad={() => {
                           courseService.updateLessonProgress(
                             currentLessonId!,
@@ -1283,21 +1388,19 @@ export default function CoursePlayer() {
                       />
                     ) : (
                       <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                        <Download className="w-16 h-16 text-gray-400 mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">
-                          Document disponible
+                        <Download className="w-12 h-12 text-gray-400 mb-4" />
+                        <h3 className="text-base font-medium text-gray-900 mb-2">
+                          {t('documentAvailable')}
                         </h3>
-                        <p className="text-gray-600 mb-6 max-w-md">
-                          Ce document n'est pas prévisualisable directement.
-                          Cliquez sur le bouton de téléchargement ci-dessus pour
-                          l'ouvrir.
+                        <p className="text-sm text-gray-600 mb-4 max-w-sm">
+                          {t('documentNotPreviewable')}
                         </p>
                         <a
                           href={currentLesson.documentUrl}
                           download
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center space-x-2 px-6 py-3 bg-[#0096F0] text-white rounded-lg hover:bg-[#0080D6] transition-colors"
+                          className="flex items-center space-x-2 px-4 py-2 bg-[#0096F0] text-white rounded-lg hover:bg-[#0080D6] transition-colors text-sm"
                           onClick={() => {
                             courseService.updateLessonProgress(
                               currentLessonId!,
@@ -1307,7 +1410,7 @@ export default function CoursePlayer() {
                           }}
                         >
                           <Download className="w-5 h-5" />
-                          <span>Ouvrir le document</span>
+                          <span>{t('openDocument')}</span>
                         </a>
                       </div>
                     )}
@@ -1345,19 +1448,13 @@ export default function CoursePlayer() {
                     ) : (
                       <div className="text-gray-700 leading-relaxed">
                         <p className="mb-4">
-                          Dans cette leçon, nous explorerons les concepts
-                          importants qui vous permettront de progresser dans
-                          votre apprentissage.
+                          {t('lessonContent')}
                         </p>
                         <p className="mb-4">
-                          Prenez le temps de bien comprendre chaque notion
-                          présentée et n'hésitez pas à revoir cette leçon si
-                          nécessaire.
+                          {t('lessonAdvice')}
                         </p>
                         <p>
-                          Une fois que vous avez assimilé le contenu, vous
-                          pouvez marquer cette leçon comme terminée et passer à
-                          la suivante.
+                          {t('lessonCompletion')}
                         </p>
                       </div>
                     )}
@@ -1376,7 +1473,7 @@ export default function CoursePlayer() {
                   className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-[#0096F0] hover:bg-gray-50 rounded-lg transition-colors"
                 >
                   <ChevronLeft className="w-4 h-4" />
-                  <span>Précédent</span>
+                  <span>{t('playerPrevious')}</span>
                 </button>
               ) : (
                 <div />
@@ -1393,12 +1490,12 @@ export default function CoursePlayer() {
                   {markingComplete ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      <span>Marquage...</span>
+                      <span>{t('marking')}</span>
                     </>
                   ) : (
                     <>
                       <CheckCircle className="w-5 h-5" />
-                      <span>Marquer comme terminé</span>
+                      <span>{t('playerMarkAsCompleted')}</span>
                     </>
                   )}
                 </button>
@@ -1409,7 +1506,7 @@ export default function CoursePlayer() {
                   onClick={() => navigateToLesson(nextLesson.id)}
                   className="flex items-center space-x-2 px-6 py-3 bg-[#0096F0] text-white rounded-lg hover:bg-[#0080D6] transition-colors font-medium"
                 >
-                  <span>Suivant</span>
+                  <span>{t('playerNext')}</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               )}

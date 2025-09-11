@@ -225,7 +225,7 @@ export default function Home() {
                     <div className="p-6">
                       <div className="flex items-center space-x-2 mb-3">
                         <span className="bg-amber-50 text-amber-600 px-3 py-1 rounded-full text-xs font-medium group-hover:bg-[#DFB216] group-hover:text-white transition-colors">
-                          {course.categoryName || "Design"}
+                          {course.categoryName || ""}
                         </span>
                         <div className="flex items-center space-x-1">
                           <Star className="w-4 h-4 text-[#DFB216] fill-current group-hover:scale-110 transition-transform" />
@@ -234,7 +234,7 @@ export default function Home() {
                           </span>
                         </div>
                       </div>
-                      <h3 className="font-bold text-lg text-gray-900 mb-2 group-hover:text-[#0096F0] transition-colors">
+                      <h3 className="font-bold text-lg text-blue-900 mb-2 group-hover:text-[#0096F0] transition-colors">
                         {course.title}
                       </h3>
                       <p className="text-gray-600 text-sm mb-4">

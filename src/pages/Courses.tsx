@@ -8,7 +8,6 @@ import {
   Star,
   Clock,
   BookOpen,
-  Loader2,
   AlertCircle,
   Users,
   Award,
@@ -358,8 +357,70 @@ export default function Courses() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin text-[#0096F0]" />
+      <div className="min-h-screen bg-gray-50">
+        {/* Skeleton Header */}
+        <section className="bg-gradient-to-r from-gray-50 via-white to-gray-50 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <div className="h-12 bg-gray-200 rounded animate-pulse w-96 mx-auto mb-4"></div>
+              <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4 mx-auto"></div>
+            </div>
+          </div>
+        </section>
+
+        {/* Skeleton Filters */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-10 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+
+          {/* Skeleton Results Header */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="h-6 bg-gray-200 rounded animate-pulse w-48"></div>
+            <div className="h-10 bg-gray-200 rounded animate-pulse w-32"></div>
+          </div>
+
+          {/* Skeleton Course Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[...Array(12)].map((_, index) => (
+              <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="h-48 bg-gray-200 animate-pulse"></div>
+                <div className="p-6">
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-16 mb-3"></div>
+                  <div className="h-6 bg-gray-200 rounded animate-pulse w-full mb-3"></div>
+                  <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4 mb-4"></div>
+                  
+                  <div className="flex items-center justify-between text-sm mb-4">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-16"></div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-1">
+                      <div className="w-4 h-4 bg-gray-200 rounded animate-pulse"></div>
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-8"></div>
+                    </div>
+                    <div className="h-8 bg-gray-200 rounded animate-pulse w-20"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Skeleton Pagination */}
+          <div className="flex justify-center mt-12">
+            <div className="flex space-x-2">
+              {[...Array(5)].map((_, index) => (
+                <div key={index} className="w-10 h-10 bg-gray-200 rounded animate-pulse"></div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

@@ -65,7 +65,7 @@ export default function CourseCard({ course  , variant = 'default' }: CourseCard
               <div className="mt-2">
                 <div className="w-full bg-gray-200 rounded-full h-2">
                   <div 
-                    className="bg-success h-2 rounded-full transition-all duration-300" 
+                    className="bg-blue-500 h-2 rounded-full transition-all duration-300" 
                     style={{ width: `${course.progress}%` }}
                   ></div>
                 </div>
@@ -75,7 +75,7 @@ export default function CourseCard({ course  , variant = 'default' }: CourseCard
           </div>
           <Link 
             to={`/course/${course.id}`}
-            className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium"
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium"
           >
             {course.progress && course.progress > 0 ? 'Continuer' : 'Commencer'}
           </Link>
@@ -138,7 +138,7 @@ export default function CourseCard({ course  , variant = 'default' }: CourseCard
         
         <Link 
           to={`/course/${course.id}`}
-          className="w-full bg-primary text-white py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium text-center block"
+          className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition-colors font-medium text-center block"
         >
           {course.isEnrolled && course.progress && course.progress > 0 ? 'Continuer le cours' : 'Commencer le cours'}
         </Link>

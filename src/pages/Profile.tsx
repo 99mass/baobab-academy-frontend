@@ -19,6 +19,8 @@ import {
   type UserStats,
 } from "../services/userProfileService";
 import CourseCard from "../components/CourseCard";
+import { useTranslation } from "../utils/translations";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface UpdateProfileData {
   firstName: string;
@@ -28,6 +30,8 @@ interface UpdateProfileData {
 
 export default function Profile() {
   const { user, refreshUser } = useAuth();
+  const { lang } = useLanguage();
+  const { t } = useTranslation(lang);
   const [activeTab, setActiveTab] = useState("overview");
   const [isEditing, setIsEditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -136,11 +140,11 @@ export default function Profile() {
 
     try {
       if (!userInfo.firstName.trim() || !userInfo.lastName.trim()) {
-        throw new Error("Le prénom et le nom sont obligatoires");
+        throw new Error(t('firstNameRequired'));
       }
 
       if (!userInfo.email.trim()) {
-        throw new Error("L'email est obligatoire");
+        throw new Error(t('emailRequired'));
       }
 
       console.log("🔄 Mise à jour du profil:", userInfo);
@@ -224,7 +228,7 @@ export default function Profile() {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-[#0096F0] mx-auto mb-4" />
-          <p className="text-gray-600">Chargement du profil...</p>
+          <p className="text-gray-600">{t('loadingProfile')}</p>
         </div>
       </div>
     );
@@ -249,7 +253,7 @@ export default function Profile() {
               </svg>
             </div>
             <p className="text-sm text-green-700 font-medium">
-              Profil mis à jour avec succès !
+              {t('profileUpdatedSuccess')}
             </p>
           </div>
         )}
@@ -270,7 +274,7 @@ export default function Profile() {
                 onClick={loadUserCourseData}
                 className="text-sm text-yellow-800 underline hover:no-underline"
               >
-                Réessayer
+                {t('tryAgain')}
               </button>
             </div>
           </div>
@@ -292,7 +296,7 @@ export default function Profile() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Prénom
+                          {t('firstName')}
                         </label>
                         <input
                           type="text"
@@ -301,13 +305,13 @@ export default function Profile() {
                           onChange={handleInputChange}
                           disabled={isUpdating}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-colors disabled:opacity-50"
-                          placeholder="Votre prénom"
+                          placeholder={t('yourFirstName')}
                           required
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Nom
+                          {t('lastName')}
                         </label>
                         <input
                           type="text"
@@ -316,14 +320,14 @@ export default function Profile() {
                           onChange={handleInputChange}
                           disabled={isUpdating}
                           className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-colors disabled:opacity-50"
-                          placeholder="Votre nom"
+                          placeholder={t('yourLastName')}
                           required
                         />
                       </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Adresse email
+                        {t('emailAddress')}
                       </label>
                       <input
                         type="email"
@@ -332,7 +336,7 @@ export default function Profile() {
                         onChange={handleInputChange}
                         disabled={isUpdating}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-colors disabled:opacity-50"
-                        placeholder="votre.email@exemple.com"
+                        placeholder={t('yourEmail')}
                         required
                       />
                     </div>
@@ -345,23 +349,23 @@ export default function Profile() {
                     <p className="text-gray-600 mb-1 text-sm">{user.email}</p>
                     {user.createdAt && (
                       <p className="text-sm text-gray-500 mb-4">
-                        Membre depuis {formatMemberSince(user.createdAt)}
+                        {t('memberSince')} {formatMemberSince(user.createdAt)}
                       </p>
                     )}
                     <div className="flex items-center space-x-6 text-sm text-gray-500">
                       <span className="flex items-center space-x-2">
                         <BookOpen className="w-4 h-4" />
                         <span>
-                          {userStats?.totalEnrolledCourses || 0} cours inscrits
+                          {userStats?.totalEnrolledCourses || 0} {t('coursesEnrolled')}
                         </span>
                       </span>
                       <span className="flex items-center space-x-2">
                         <Award className="w-4 h-4" />
-                        <span>{userStats?.completedCourses || 0} terminés</span>
+                        <span>{userStats?.completedCourses || 0} {t('coursesCompleted')}</span>
                       </span>
                       <span className="flex items-center space-x-2">
                         <TrendingUp className="w-4 h-4" />
-                        <span>{getCompletionRate()}% de réussite</span>
+                        <span>{getCompletionRate()}% {t('successRatePercent')}</span>
                       </span>
                     </div>
                   </>
@@ -378,7 +382,7 @@ export default function Profile() {
                     className="flex items-center justify-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <X className="w-4 h-4" />
-                    <span>Annuler</span>
+                    <span>{t('cancel')}</span>
                   </button>
                   <button
                     onClick={handleSaveProfile}
@@ -388,12 +392,12 @@ export default function Profile() {
                     {isUpdating ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Sauvegarde...</span>
+                        <span>{t('saving')}</span>
                       </>
                     ) : (
                       <>
                         <Save className="w-4 h-4" />
-                        <span>Sauvegarder</span>
+                        <span>{t('save')}</span>
                       </>
                     )}
                   </button>
@@ -404,7 +408,7 @@ export default function Profile() {
                   className="flex items-center space-x-2 px-6 py-3 border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   <Edit className="w-5 h-5" />
-                  <span>Modifier le profil</span>
+                  <span>{t('editProfile')}</span>
                 </button>
               )}
             </div>
@@ -412,7 +416,7 @@ export default function Profile() {
 
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-gray-600">Rôle :</span>
+              <span className="text-sm font-medium text-gray-600">{t('profileRole')} :</span>
               <span
                 className={`px-3 py-1 rounded-full text-sm font-medium ${
                   user.role === "ADMIN"
@@ -420,7 +424,7 @@ export default function Profile() {
                     : "bg-blue-100 text-blue-700"
                 }`}
               >
-                {user.role === "ADMIN" ? "Administrateur" : "Étudiant"}
+                {user.role === "ADMIN" ? t('profileAdministrator') : t('profileStudent')}
               </span>
             </div>
           </div>
@@ -431,7 +435,7 @@ export default function Profile() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Cours inscrits
+                  {t('profileEnrolledCourses')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {loadingCourses ? (
@@ -451,7 +455,7 @@ export default function Profile() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Cours terminés
+                  {t('profileCompletedCourses')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {loadingCourses ? (
@@ -471,7 +475,7 @@ export default function Profile() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Temps d'étude
+                  {t('studyTime')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {loadingCourses ? (
@@ -491,7 +495,7 @@ export default function Profile() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Taux de réussite
+                  {t('profileSuccessRateLabel')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {loadingCourses ? (
@@ -517,7 +521,7 @@ export default function Profile() {
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             }`}
           >
-            Vue d'ensemble
+            {t('profileOverview')}
           </button>
           <button
             onClick={() => setActiveTab("inProgress")}
@@ -527,7 +531,7 @@ export default function Profile() {
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             }`}
           >
-            En cours ({loadingCourses ? "..." : inProgressCourses.length})
+            {t('profileInProgress')} ({loadingCourses ? "..." : inProgressCourses.length})
           </button>
           <button
             onClick={() => setActiveTab("completed")}
@@ -537,14 +541,14 @@ export default function Profile() {
                 : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             }`}
           >
-            Terminés ({loadingCourses ? "..." : completedCourses.length})
+            {t('completed')} ({loadingCourses ? "..." : completedCourses.length})
           </button>
         </div>
 
         {loadingCourses && (
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
             <Loader2 className="w-8 h-8 animate-spin text-[#0096F0] mx-auto mb-4" />
-            <p className="text-gray-600">Chargement de vos cours...</p>
+            <p className="text-gray-600">{t('profileLoadingCourses')}</p>
           </div>
         )}
 
@@ -554,8 +558,8 @@ export default function Profile() {
               <div className="space-y-8">
                 {inProgressCourses.length > 0 && (
                   <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                      Continuer l'apprentissage
+                    <h2 className="text-xl font-bold text-[#CD010A] mb-6">
+                      {t('continuelearning')}
                     </h2>
                     <div className="space-y-4">
                       {inProgressCourses.slice(0, 3).map((course) => (
@@ -571,7 +575,7 @@ export default function Profile() {
 
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
                   <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                    Accomplissements récents
+                    {t('recentAchievements')}
                   </h2>
                   {completedCourses.length > 0 ? (
                     <div className="space-y-4">
@@ -585,7 +589,7 @@ export default function Profile() {
                           </div>
                           <div className="flex-1">
                             <h3 className="font-medium text-gray-900">
-                              Cours terminé
+                              {t('profileCourseCompleted')}
                             </h3>
                             <p className="text-sm text-gray-600">
                               {course.title}
@@ -595,7 +599,7 @@ export default function Profile() {
                                 ? new Date(
                                     course.enrolledAt
                                   ).toLocaleDateString("fr-FR")
-                                : "Récemment"}
+                                : t('recently')}
                             </p>
                           </div>
                           <div className="text-right">
@@ -608,11 +612,10 @@ export default function Profile() {
                     <div className="text-center py-8">
                       <Award className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                       <p className="text-gray-500">
-                        Aucun cours terminé pour le moment
+                        {t('noCompletedCourses')}
                       </p>
                       <p className="text-sm text-gray-400 mt-2">
-                        Terminez votre premier cours pour voir vos
-                        accomplissements ici
+                        {t('finishFirstCourse')}
                       </p>
                     </div>
                   )}
@@ -623,7 +626,7 @@ export default function Profile() {
             {activeTab === "inProgress" && (
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Cours en cours
+                  {t('coursesInProgress')}
                 </h2>
                 {inProgressCourses.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -638,16 +641,16 @@ export default function Profile() {
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
                     <BookOpen className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      Aucun cours en cours
+                      {t('noCoursesInProgress')}
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      Explorez nos cours pour commencer votre apprentissage
+                      {t('exploreCoursesToStart')}
                     </p>
                     <a
                       href="/courses"
                       className="inline-flex items-center px-4 py-2 bg-[#0096F0] text-white rounded-lg hover:bg-[#0080D6] transition-colors"
                     >
-                      Découvrir les cours
+                      {t('discoverCourses')}
                     </a>
                   </div>
                 )}
@@ -657,7 +660,7 @@ export default function Profile() {
             {activeTab === "completed" && (
               <div>
                 <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                  Cours terminés
+                  {t('completedCourses')}
                 </h2>
                 {completedCourses.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -666,9 +669,9 @@ export default function Profile() {
                         <CourseCard
                           course={convertToCourseCardFormat(course) as any}
                         />
-                        <div className="absolute top-2 right-2 bg-green-600 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
+                        <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded-full text-xs font-medium flex items-center space-x-1">
                           <Award className="w-3 h-3" />
-                          <span>Terminé</span>
+                          <span>{t('completed')}</span>
                         </div>
                       </div>
                     ))}
@@ -677,11 +680,10 @@ export default function Profile() {
                   <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
                     <Award className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      Aucun cours terminé
+                      {t('noCoursesCompleted')}
                     </h3>
                     <p className="text-gray-600 mb-4">
-                      Terminez vos premiers cours pour voir vos accomplissements
-                      ici
+                      {t('finishCoursesToSeeHere')}
                     </p>
                     {enrolledCourses.length > 0 ? (
                       <a
@@ -689,14 +691,14 @@ export default function Profile() {
                         onClick={() => setActiveTab("inProgress")}
                         className="inline-flex items-center px-4 py-2 bg-[#0096F0] text-white rounded-lg hover:bg-[#0080D6] transition-colors"
                       >
-                        Continuer mes cours
+                        {t('continueMyCourses')}
                       </a>
                     ) : (
                       <a
                         href="/courses"
                         className="inline-flex items-center px-4 py-2 bg-[#0096F0] text-white rounded-lg hover:bg-[#0080D6] transition-colors"
                       >
-                        Découvrir les cours
+                        {t('discoverCourses')}
                       </a>
                     )}
                   </div>
