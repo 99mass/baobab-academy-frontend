@@ -68,11 +68,11 @@ export default function AdminDashboard() {
   );
   const [stats] = useState<DashboardStats>({
     totalCourses: 0,
-    totalStudents: 2657,
-    totalCompletions: 1456,
-    averageRating: 4.8,
+    totalStudents: 0,
+    totalCompletions: 0,
+    averageRating: 0.0,
     monthlyRevenue: "36,300€",
-    activeUsers: 1842,
+    activeUsers: 0,
   });
 
   useEffect(() => {

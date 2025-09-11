@@ -91,7 +91,6 @@ export const translations = {
     exploreOurTraining: "Explorez Nos",
     training: "Formations",
     coursePageDescription: "Découvrez des cours conçus par des experts pour faire grandir vos compétences et accélérer votre carrière.",
-    coursePageDescriptionEn: "Discover courses designed by experts to grow your skills and accelerate your career.",
     errorOccurred: "Oops! Une erreur est survenue",
     activeFilters: "Filtres actifs:",
     clearAll: "Tout effacer",
@@ -101,11 +100,6 @@ export const translations = {
     view: "Voir",
     viewCourse: "Voir le cours",
     popular: "Populaire",
-    courseFound: "cours trouvé",
-    coursesFound: "cours trouvés",
-    noCoursesFound: "Aucun cours trouvé",
-    noCoursesMessage: "Essayez de modifier vos critères de recherche ou explorez toutes nos catégories.",
-    clearAllFilters: "Effacer tous les filtres",
 
     // Course Detail page
     backToCourses: "Retour aux cours",
@@ -160,18 +154,13 @@ export const translations = {
     newStudents: "Nouveaux étudiants",
     completionRate: "Taux de completion",
     satisfaction: "Satisfaction",
-    popularCourses: "Cours populaires",
     recentActivity: "Activité récente",
     seeAll: "Voir tout",
-    
+
     // Course management
-    category: "Catégorie",
     status: "Statut",
-    rating: "Note",
-    createdOn: "Créé le",
     actions: "Actions",
     searchCourse: "Rechercher un cours...",
-    viewCourse: "Voir le cours",
     editCourse: "Modifier le cours",
     deleteCourse: "Supprimer le cours",
     confirmDeleteCourse: "Êtes-vous sûr de vouloir supprimer ce cours ?",
@@ -185,10 +174,9 @@ export const translations = {
     displaying: "Affichage de",
     to: "à",
     on: "sur",
-    courses: "cours",
     previous: "Précédent",
     next: "Suivant",
-    
+
     // User management
     user: "Utilisateur",
     email: "Email",
@@ -212,7 +200,7 @@ export const translations = {
     noUsersMessage: "Les nouveaux utilisateurs apparaîtront ici.",
     page: "Page",
     totalAdministrators: "Total administrateurs",
-    
+
     // Activity types
     newStudentEnrolled: "Nouvel étudiant inscrit au cours",
     courseCompletedSuccessfully: "Cours terminé avec succès",
@@ -222,7 +210,6 @@ export const translations = {
     oneHourAgo: "Il y a 1h",
     twoHoursAgo: "Il y a 2h",
     fourHoursAgo: "Il y a 4h",
-    admin: "Admin",
   },
   en: {
     // Header
@@ -325,11 +312,6 @@ export const translations = {
     view: "View",
     viewCourse: "View course",
     popular: "Popular",
-    courseFound: "course found",
-    coursesFound: "courses found",
-    noCoursesFound: "No courses found",
-    noCoursesMessage: "Try modifying your search criteria or explore all our categories.",
-    clearAllFilters: "Clear all filters",
 
     // Course Detail page
     backToCourses: "Back to courses",
@@ -384,18 +366,13 @@ export const translations = {
     newStudents: "New students",
     completionRate: "Completion rate",
     satisfaction: "Satisfaction",
-    popularCourses: "Popular courses",
     recentActivity: "Recent activity",
     seeAll: "See all",
-    
+
     // Course management
-    category: "Category",
     status: "Status",
-    rating: "Rating",
-    createdOn: "Created on",
     actions: "Actions",
     searchCourse: "Search for a course...",
-    viewCourse: "View course",
     editCourse: "Edit course",
     deleteCourse: "Delete course",
     confirmDeleteCourse: "Are you sure you want to delete this course?",
@@ -409,10 +386,9 @@ export const translations = {
     displaying: "Showing",
     to: "to",
     on: "of",
-    courses: "courses",
     previous: "Previous",
     next: "Next",
-    
+
     // User management
     user: "User",
     email: "Email",
@@ -436,7 +412,7 @@ export const translations = {
     noUsersMessage: "New users will appear here.",
     page: "Page",
     totalAdministrators: "Total administrators",
-    
+
     // Activity types
     newStudentEnrolled: "New student enrolled in course",
     courseCompletedSuccessfully: "Course completed successfully",
@@ -446,7 +422,6 @@ export const translations = {
     oneHourAgo: "1h ago",
     twoHoursAgo: "2h ago",
     fourHoursAgo: "4h ago",
-    admin: "Admin",
   },
 };
 

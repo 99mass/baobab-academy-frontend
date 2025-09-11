@@ -106,11 +106,6 @@ export default function Header({
           {/* Logo avec description */}
           <Link to="/" className="flex items-center space-x-3 group">
             <img src="/logo_fibem.png" alt="FIBEM Logo" className="w-26 h-12" />
-            {/* <div className="hidden sm:block">
-              <span className="text-md font-bold text-[#CD010A]">
-                Plateforme d'apprentissage
-              </span>
-            </div> */}
              <div className="hidden sm:block  bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-medium  animate-bounce-in">
                  {t('platformDescription')}
               </div>
@@ -118,50 +113,7 @@ export default function Header({
 
           {/* Language Switcher and Search */}
           <div className="flex items-center justify-end flex-1 mx-4">
-            {/* Language Switcher */}
-            <div className="relative group mr-0">
-              <button className="flex items-center space-x-2 px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200 font-medium">
-                <img
-                  src={
-                    lang === "fr"
-                      ? "https://flagcdn.com/fr.svg"
-                      : "https://flagcdn.com/gb.svg"
-                  }
-                  alt="Language"
-                  className="w-5 h-auto rounded-sm"
-                />
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <button
-                  onClick={() => {
-                    setLang("fr");
-                  }}
-                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
-                >
-                  <img
-                    src="https://flagcdn.com/fr.svg"
-                    alt="Français"
-                    className="w-5 h-auto rounded-sm"
-                  />
-                  <span>Français</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setLang("en");
-                  }}
-                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
-                >
-                  <img
-                    src="https://flagcdn.com/gb.svg"
-                    alt="English"
-                    className="w-5 h-auto rounded-sm"
-                  />
-                  <span>English</span>
-                </button>
-              </div>
-            </div>
-
+          
             {/* Recherche par catégorie */}
             <div ref={searchRef} className="relative">
               <div
@@ -202,6 +154,49 @@ export default function Header({
                     <Search className="w-6 h-6" />
                   </button>
                 )}
+              </div>
+            </div>
+              {/* Language Switcher */}
+            <div className="relative group mr-0">
+              <button className="flex items-center space-x-2 px-4 py-2.5 rounded-lg text-gray-600 hover:text-blue-600 hover:bg-gray-50 transition-all duration-200 font-medium">
+                <img
+                  src={
+                    lang === "fr"
+                      ? "https://flagcdn.com/fr.svg"
+                      : "https://flagcdn.com/gb.svg"
+                  }
+                  alt="Language"
+                  className="w-5 h-auto rounded-sm"
+                />
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              <div className="absolute top-full right-0 mt-2 w-40 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <button
+                  onClick={() => {
+                    setLang("fr");
+                  }}
+                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
+                >
+                  <img
+                    src="https://flagcdn.com/fr.svg"
+                    alt="Français"
+                    className="w-5 h-auto rounded-sm"
+                  />
+                  <span>Français</span>
+                </button>
+                <button
+                  onClick={() => {
+                    setLang("en");
+                  }}
+                  className="flex items-center w-full text-left px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors space-x-3 font-medium"
+                >
+                  <img
+                    src="https://flagcdn.com/gb.svg"
+                    alt="English"
+                    className="w-5 h-auto rounded-sm"
+                  />
+                  <span>English</span>
+                </button>
               </div>
             </div>
           </div>
