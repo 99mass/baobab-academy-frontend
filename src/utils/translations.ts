@@ -88,6 +88,7 @@ export const translations = {
     category: "Catégorie",
     loadingCourses: "Chargement des cours...",
     errorLoadingCourses: "Erreur lors du chargement des cours",
+    errorLoadingCategories: "Erreur lors du chargement des catégories",
     exploreOurTraining: "Explorez Nos",
     training: "Formations",
     coursePageDescription: "Découvrez des cours conçus par des experts pour faire grandir vos compétences et accélérer votre carrière.",
@@ -100,6 +101,9 @@ export const translations = {
     view: "Voir",
     viewCourse: "Voir le cours",
     popular: "Populaire",
+    list: "Liste",
+    grid: "Grille",
+    coursesFound: "cours trouvés",
 
     // Course Detail page
     backToCourses: "Retour aux cours",
@@ -411,6 +415,7 @@ export const translations = {
     category: "Category",
     loadingCourses: "Loading courses...",
     errorLoadingCourses: "Error loading courses",
+    errorLoadingCategories: "Error loading categories",
     exploreOurTraining: "Explore Our",
     training: "Training",
     coursePageDescription: "Discover courses designed by experts to grow your skills and accelerate your career.",
@@ -423,6 +428,9 @@ export const translations = {
     view: "View",
     viewCourse: "View course",
     popular: "Popular",
+    list: "List",
+    grid: "Grid",
+    coursesFound: "courses found",
 
     // Course Detail page
     backToCourses: "Back to courses",
@@ -615,7 +623,7 @@ export const translations = {
     completelyFree: "Completely free course",
     unlimitedAccess: "Unlimited access to course",
     downloadableResources: "Downloadable resources",
-    courseInformation: "Course information",
+    courseInformation: "Informations du cours",
     totalDuration: "Total duration",
     detailLevel: "Level",
     lastUpdate: "Last update",
@@ -636,7 +644,7 @@ export const translations = {
     videoNotSupported: "Your browser does not support video playback.",
     documentAvailable: "Document available",
     documentNotPreviewable: "This document is not directly previewable. Click the download button above to open it.",
-    openDocument: "Open document",
+    openDocument: "Ouvrir le document",
     lessonContent: "In this lesson, we will explore important concepts that will help you progress in your learning.",
     lessonAdvice: "Take time to understand each concept presented and don't hesitate to review this lesson if necessary.",
     lessonCompletion: "Once you have absorbed the content, you can mark this lesson as completed and move on to the next one.",

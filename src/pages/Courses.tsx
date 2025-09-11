@@ -45,7 +45,7 @@ export default function Courses() {
         if (courseResponse.success && courseResponse.data) {
           setCourses(courseResponse.data.content);
         } else {
-          throw new Error(courseResponse.message || "Failed to fetch courses");
+          throw new Error(courseResponse.message || t('errorLoadingCourses'));
         }
 
         const categoryResponse = await courseService.getCategories();
@@ -53,7 +53,7 @@ export default function Courses() {
           setCategories(categoryResponse.data);
         } else {
           throw new Error(
-            categoryResponse.message || "Failed to fetch categories"
+            categoryResponse.message || t('errorLoadingCategories')
           );
         }
       } catch (err: any) {
@@ -222,9 +222,9 @@ export default function Courses() {
             <div className="flex items-center space-x-1 text-xs text-gray-500">
               <Calendar className="w-3 h-3" />
               <span>
-                Créé le{" "}
+                {t('createdOn')}{" "}
                 {course.createdAt
-                  ? new Date(course.createdAt).toLocaleDateString("fr-FR", {
+                  ? new Date(course.createdAt).toLocaleDateString(lang, {
                       day: "2-digit",
                       month: "2-digit",
                       year: "numeric",
@@ -233,7 +233,7 @@ export default function Courses() {
               </span>
             </div>
             <div className="flex items-center space-x-1 text-[#0096F0] opacity-60 group-hover:opacity-100 transition-opacity">
-              <span className="text-sm font-medium">Voir</span>
+              <span className="text-sm font-medium">{t('view')}</span>
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
@@ -244,7 +244,7 @@ export default function Courses() {
         <div className="absolute top-2 left-1/2 transform -translate-x-1/2">
           <div className="bg-[#DFB216] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center space-x-1 shadow-lg">
             <Award className="w-3 h-3" />
-            <span>Populaire</span>
+            <span>{t('popular')}</span>
           </div>
         </div>
       )}
@@ -305,12 +305,12 @@ export default function Courses() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 flex-wrap">
                 <span className="text-sm text-[#0096F0] font-medium bg-[#0096F0]/10 px-3 py-1 rounded-full">
-                  {course.categoryName || "{t('noCategory')}"}
+                  {course.categoryName || t('noCategory')}
                 </span>
                 {course.students > 100 && (
                   <span className="text-xs text-[#DFB216] font-medium bg-amber-50 px-2 py-1 rounded-full flex items-center gap-1">
                     <Award className="w-3 h-3" />
-                    Populaire
+                    {t('popular')}
                   </span>
                 )}
               </div>
@@ -328,7 +328,7 @@ export default function Courses() {
               <div className="flex items-center gap-6 text-sm text-gray-500">
                 <div className="flex items-center gap-1.5">
                   <Users className="w-4 h-4" />
-                  <span>{course.students.toLocaleString()} étudiants</span>
+                  <span>{course.students.toLocaleString()} {t('students')}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock className="w-4 h-4" />
@@ -344,7 +344,7 @@ export default function Courses() {
 
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1 text-[#0096F0] opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span className="text-sm font-medium">Voir le cours</span>
+                  <span className="text-sm font-medium">{t('viewCourse')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
               </div>
@@ -431,7 +431,7 @@ export default function Courses() {
         <div className="text-center p-8 bg-red-50 rounded-xl border border-red-200">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-red-800 mb-2">
-            Oops! Une erreur est survenue
+            {t('errorOccurred')}
           </h2>
           <p className="text-red-700">{error}</p>
         </div>
@@ -445,7 +445,8 @@ export default function Courses() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-[#CD010A] mb-6">
-              {t('exploreOurTraining')} <span className="text-[#CD010A]">{t('training')}</span>
+              {t('exploreOurTraining')}{" "}
+              <span className="text-[#CD010A]">{t('training')}</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
               {t('coursePageDescription')}
@@ -457,7 +458,7 @@ export default function Courses() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher un cours, une compétence..."
+                placeholder={t('searchPlaceholderCourses')}
                 className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#0096F0] focus:border-[#0096F0] transition-all text-lg shadow-sm"
               />
             </div>
@@ -492,21 +493,21 @@ export default function Courses() {
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
                   <Filter className="w-5 h-5" />
-                  <span>Filtres</span>
+                  <span>{t('filters')}</span>
                 </h2>
                 {hasActiveFilters && (
                   <button
                     onClick={clearFilters}
                     className="text-sm text-[#0096F0] hover:text-[#0080D6] transition-colors font-medium"
                   >
-                    Tout effacer
+                    {t('clearAll')}
                   </button>
                 )}
               </div>
 
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                  Catégorie
+                  {t('category')}
                 </h3>
                 <div className="space-y-2">
                   <label
@@ -523,7 +524,7 @@ export default function Courses() {
                     />
                     <div className="ml-3 flex items-center space-x-2 group-hover:text-[#0096F0] transition-colors">
                       <BookOpen className="w-4 h-4" />
-                      <span className="text-sm">Toutes les catégories</span>
+                      <span className="text-sm">{t('allCategories')}</span>
                     </div>
                   </label>
                   {categories.map((category) => {
@@ -553,7 +554,7 @@ export default function Courses() {
 
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                  Niveau
+                  {t('level')}
                 </h3>
                 <div className="space-y-2">
                   {levels.map((level) => (
@@ -571,7 +572,7 @@ export default function Courses() {
                       />
                       <span className="ml-3 text-sm group-hover:text-[#0096F0] transition-colors">
                         {level === "all"
-                          ? "Tous les niveaux"
+                          ? t('allLevels')
                           : courseService.getLevelLabel(level)}
                       </span>
                     </label>
@@ -587,7 +588,7 @@ export default function Courses() {
               className="flex items-center space-x-2 bg-white px-4 py-3 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm"
             >
               <Filter className="w-4 h-4" />
-              <span>Filtres</span>
+              <span>{t('filters')}</span>
               {hasActiveFilters && (
                 <span className="w-2 h-2 bg-[#0096F0] rounded-full"></span>
               )}
@@ -601,7 +602,7 @@ export default function Courses() {
                   <span className="text-gray-900 font-bold">
                     {filteredCourses.length}
                   </span>{" "}
-                  cours trouvé{filteredCourses.length > 1 ? "s" : ""}
+                  {filteredCourses.length > 1 ? t('coursesFound') : t('courseFound')}
                 </p>
 
                 <div className="flex items-center bg-white rounded-lg border border-gray-200 p-1">
@@ -612,10 +613,10 @@ export default function Courses() {
                         ? "bg-[#0096F0] text-white shadow-sm"
                         : "text-gray-600 hover:text-[#0096F0] hover:bg-gray-50"
                     }`}
-                    title="Vue liste"
+                    title={t('listView')}
                   >
                     <List className="w-4 h-4" />
-                    <span className="hidden sm:inline">Liste</span>
+                    <span className="hidden sm:inline">{t('list')}</span>
                   </button>
                   <button
                     onClick={() => setViewMode("grid")}
@@ -624,10 +625,10 @@ export default function Courses() {
                         ? "bg-[#0096F0] text-white shadow-sm"
                         : "text-gray-600 hover:text-[#0096F0] hover:bg-gray-50"
                     }`}
-                    title="Vue grille"
+                    title={t('gridView')}
                   >
                     <LayoutGrid className="w-4 h-4" />
-                    <span className="hidden sm:inline">Grille</span>
+                    <span className="hidden sm:inline">{t('grid')}</span>
                   </button>
                 </div>
               </div>
@@ -635,7 +636,7 @@ export default function Courses() {
               {hasActiveFilters && (
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-sm text-gray-500 font-medium">
-                    Filtres actifs:
+                    {t('activeFilters')}
                   </span>
                   {searchQuery && (
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#0096F0]/10 text-[#0096F0] border border-[#0096F0]/20">
@@ -698,17 +699,16 @@ export default function Courses() {
                   <Search className="w-12 h-12 text-gray-400" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                  Aucun cours trouvé
+                  {t('noResults')}
                 </h3>
                 <p className="text-gray-600 mb-8 max-w-md mx-auto">
-                  Essayez de modifier vos critères de recherche ou explorez
-                  toutes nos catégories.
+                  {t('noResultsMessage')}
                 </p>
                 <button
                   onClick={clearFilters}
                   className="bg-[#0096F0] text-white px-8 py-3 rounded-xl hover:bg-[#0080D6] transition-colors font-semibold"
                 >
-                  Effacer tous les filtres
+                  {t('clearFilters')}
                 </button>
               </div>
             )}
@@ -724,7 +724,7 @@ export default function Courses() {
           />
           <div className="fixed inset-y-0 right-0 max-w-sm w-full bg-white shadow-xl">
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Filtres</h2>
+              <h2 className="text-lg font-semibold text-gray-900">{t('filters')}</h2>
               <button
                 onClick={() => setShowFilters(false)}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -736,7 +736,7 @@ export default function Courses() {
             <div className="p-6 space-y-6 overflow-y-auto h-full pb-24">
               <div>
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                  Catégorie
+                  {t('category')}
                 </h3>
                 <div className="space-y-3">
                   <label
@@ -753,7 +753,7 @@ export default function Courses() {
                     />
                     <div className="ml-3 flex items-center space-x-2">
                       <BookOpen className="w-4 h-4" />
-                      <span className="text-sm">Toutes les catégories</span>
+                      <span className="text-sm">{t('allCategories')}</span>
                     </div>
                   </label>
                   {categories.map((category: Category) => {
@@ -780,7 +780,7 @@ export default function Courses() {
 
               <div>
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                  Niveau
+                  {t('level')}
                 </h3>
                 <div className="space-y-3">
                   {levels.map((level) => (
@@ -795,7 +795,7 @@ export default function Courses() {
                       />
                       <span className="ml-3 text-sm">
                         {level === "all"
-                          ? "Tous les niveaux"
+                          ? t('allLevels')
                           : courseService.getLevelLabel(level)}
                       </span>
                     </label>
@@ -805,7 +805,7 @@ export default function Courses() {
 
               <div>
                 <h3 className="text-sm font-semibold text-gray-800 mb-4">
-                  Durée
+                  {t('duration')}
                 </h3>
                 <div className="space-y-3">
                   {durations.map((duration) => (
@@ -819,7 +819,7 @@ export default function Courses() {
                         className="w-4 h-4 text-[#0096F0] focus:ring-[#0096F0] border-gray-300"
                       />
                       <span className="ml-3 text-sm">
-                        {duration === "all" ? "Toutes durées" : duration}
+                        {duration === "all" ? t('allDurations') : duration}
                       </span>
                     </label>
                   ))}
@@ -833,13 +833,13 @@ export default function Courses() {
                   onClick={clearFilters}
                   className="flex-1 px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors font-medium"
                 >
-                  Effacer
+                  {t('clear')}
                 </button>
                 <button
                   onClick={() => setShowFilters(false)}
                   className="flex-1 px-4 py-3 bg-[#0096F0] text-white rounded-xl hover:bg-[#0080D6] transition-colors font-medium"
                 >
-                  Appliquer
+                  {t('apply')}
                 </button>
               </div>
             </div>
